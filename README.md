@@ -1,1 +1,24 @@
-Neural demyelination and brain damage accumulated in white matter appear as hyperintense areas on MRI scans as lesions. Modelling binary images at the population level, where each voxel represents the existence of a lesion, plays an important role in understanding ageing and inflammatory diseases. Current approaches either fit a probit regression independently to each voxel, ignoring any form of spatial dependence, or are Bayesian and account for shared information between neighbouring voxels. However, Bayesian spatial models rely on computationally intensive Markov Chain Monte Carlo (MCMC) methods for inference which are not feasible for large-scale studies. In this work we propose a scalable hierarchical Bayesian spatial model, called BLESS, capable of handling binary responses by placing continuous spike-and-slab mixture priors on spatially-varying parameters and enforcing spatial dependency on the parameter dictating the amount of sparsity within the probability of inclusion. The use of mean-field variational inference, allows our method to scale to large sample sizes by applying gradient-based optimisation of the evidence lower bound. Moreover, we avoid hyperparameter selection by performing dynamic posterior exploration, an annealing-like strategy, for structured spike-and-slab regression. Our method also accounts for the known issue of underestimation of posterior variance via variational inference by providing an approximate posterior sampling approach based on Bayesian bootstrap ideas and spike-and-slab priors with random shrinkage targets. Besides accurate uncertainty quantification, this approach is capable of producing novel cluster size based imaging statistics, such as credible intervals of cluster size, and measures of reliability of cluster occurrence. Lastly, we validate our results via simulation studies and an application to the UK Biobank, a large-scale lesion mapping study.
+# Bayesian Lesion Estimaton with a Structured Spike-and-Slab Prior
+
+## Data
+
+### Abstract
+
+### Availability 
+
+### Description 
+
+## Code
+
+### Abstract 
+
+### Description 
+
+### Optional Information 
+The following R packages are necessary to successfully use the codes:
+
+## Instructions for Use
+
+### Reproducibility
+
+### Replication (Optional)
