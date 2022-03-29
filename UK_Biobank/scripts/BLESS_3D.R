@@ -146,6 +146,7 @@ estimate_BLESS = function(X, Y, params0, eps){
     
     return(x)
   }
+  
   # Function to sum neighboring values together.
   sum_si_sj_function = function(j){
     x = matrix(apply(matrix(theta[,list_ind[[j]]],nrow=P),1,sum),nrow=P)
