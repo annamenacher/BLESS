@@ -6,8 +6,8 @@
 - Simulation study: 2D lesion masks generated via data generating process described in Supplementary Materials Sec. 5
 - UK Biobank: 3D lesion masks
 
-X: NxP matrix: subject-specific covariates
-Y: NxM matrix: lesion masks
+- X: NxP matrix: subject-specific covariates
+- Y: NxM matrix: lesion masks
 
 ### Availability 
 - Simulation study: Data can be generated via simulation study script 'data_generation.R'. We additionally provide an example simulation study containing 100 datasets (= lesion masks) generated with the setting of sample size N=1,000 and base rate intensity lambda = 3 to showcase the reproducibility of our method. 
