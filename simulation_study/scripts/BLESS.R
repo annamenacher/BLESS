@@ -38,6 +38,7 @@ eps_DPE = 0.01
 
 # Range of spike variance to evaluate in Dynamic Posterior Exploration (DPE).
 v0 = exp(seq(-20,-1,length.out=15))
+# Length of spike variance range.
 n_sim_v0 = length(v0)
 # Fix slab variance to large value.
 v1 = 10
