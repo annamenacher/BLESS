@@ -19,7 +19,7 @@ Simulated 2D lesion masks provided in this repositry under simulation_study/data
 ## Code
 
 ### Abstract 
-Code to run the mass-univariate method Firth regression, which fits a model at each voxel independently, the Bayesian spatial model BSGLMM, and our method BLESS & BB- BLESS. Additionally, we provide all code to generate figures & acquire cluster size distributions via FSL in a shell script.
+Code to run the mass-univariate method Firth regression, which fits a model at each voxel independently, the Bayesian spatial model BSGLMM, and our method BLESS-VI & BB- BLESS. Additionally, we provide all code to generate figures & acquire cluster size distributions via FSL in a shell script.
 
 ### Description 
 
