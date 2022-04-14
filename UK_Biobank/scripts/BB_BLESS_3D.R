@@ -37,7 +37,7 @@ eps = 0.001
 init = 'DPE'
 
 # Hyperparameter: Spike variance 
-v0 = exp(seq(-10,log(0.05),length.out=5))[3]
+v0 = exp(seq(-10,log(0.05),length.out=5))[1]
 # Hyperparameter: Slab variance
 v1 = 10
 # Hyperparameter: degrees of freedom for Wishart prior over precision matrix in MCAR prior 
