@@ -46,10 +46,8 @@ dir_alpha = 1
 sigma_beta0 = 10
 # Number of bootstrap replicates
 B = 1500
-# Hyperparameter: spike variance (plot marginal posterior of gamma list under prior v0=0 & identify plateau in marginal distribtuion /
-# stablization of parameters)
-# Index of best spike variance
-v0_idx = 12
+# Hyperparameter: last value of backwards DPE procedure
+v0_idx = 1
 # Range of spike variances over which DPE was run (in simulation studies: range of 15 spike variances over exp(-20) to exp(-1)). 
 #v0 = as.numeric(unlist(read.csv(paste0(path_BLESS, 'v0.csv'))[,2]))
 v0 = exp(seq(-20,-1,length.out=15))
