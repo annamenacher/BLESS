@@ -1,6 +1,6 @@
 # Bayesian Lesion Estimaton with a Structured Spike-and-Slab Prior
 
-![alt text](https://github.com/annamenacher/website_files/blob/main/poster_image_for_webiste.png?raw=true)
+![alt text](https://github.com/annamenacher/BLESS/blob/main/bb_bless_maps.png?raw=true)
 
 ## Data
 
