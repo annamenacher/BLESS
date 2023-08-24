@@ -736,7 +736,6 @@ for(sim_v0 in n_sim_v0:1){
   print(sim_v0)
       if(sim_v0 != n_sim_v0){
         params0 = list()
-        #params0$Q = as.vector(ELBO_list[(sim_v0+1),])
         params0$beta0 = beta0_list[(sim_v0+1),]
         params0$beta0 = c(params0$beta0)
         params0$Beta = matrix(NA, nrow = P, ncol = M)
@@ -820,18 +819,15 @@ if(sim > n_sim && sim <= (n_sim*2)){
 
   ELBO_data = list()
   v0 = c(v0_list[1,])
-  #v0 = v0_list
   lambda = lambda_list[1]
   N = N_list[2]
 
   sim = sim - 1*n_sim
 
   path = paste0(path_general, "N", N, "lambda", lambda, "P", P, "/")
-  #path_out2 = paste0(path_out2_general, "N", N, "lambda", lambda, "P", P, "_MCAR/")
   path_data = paste0(path_data_general, "N", N, "lambda", lambda, "P", P, "/")
   
   # Data
-  #X = matrix(c(rep(1/2,N/2),rep(-1/2,N/2)), nrow = N, ncol = P)
   if(P==1){
     # P =1
     X = matrix(c(rep(1,N/2),rep(0,N/2)), nrow = N, ncol = P)
@@ -951,7 +947,6 @@ as.numeric(unlist(read.csv(paste0(path_Firth, "N", N, "lambda", lambda, "P", P, 
     
     if(sim_v0 != n_sim_v0){
       params0 = list()
-      #params0$Q = as.vector(ELBO_list[(sim_v0+1),])
       params0$beta0 = beta0_list[(sim_v0+1),]
       params0$beta0 = c(params0$beta0)
       params0$Beta = matrix(NA, nrow = P, ncol = M)
@@ -1032,17 +1027,14 @@ if(sim > (n_sim*2) && sim <= (n_sim*3)){
 
   ELBO_data = list()
   v0 = c(v0_list[1,])
-  #v0 = v0_list
   lambda = lambda_list[1]
   N = N_list[3]
   sim = sim - 2*n_sim
 
   path = paste0(path_general, "N", N, "lambda", lambda, "P", P, "/")
-  #path_out2 = paste0(path_out2_general, "N", N, "lambda", lambda, "P", P, "_MCAR/")
   path_data = paste0(path_data_general, "N", N, "lambda", lambda, "P", P, "/")
   
   # Data
-  #X = matrix(c(rep(1/2,N/2),rep(-1/2,N/2)), nrow = N, ncol = P)
   if(P==1){
     # P =1
     X = matrix(c(rep(1,N/2),rep(0,N/2)), nrow = N, ncol = P)
@@ -1163,7 +1155,6 @@ as.numeric(unlist(read.csv(paste0(path_Firth, "N", N, "lambda", lambda, "P", P, 
     
     if(sim_v0 != n_sim_v0){
       params0 = list()
-      #params0$Q = as.vector(ELBO_list[(sim_v0+1),])
       params0$beta0 = beta0_list[(sim_v0+1),]
       params0$beta0 = c(params0$beta0)
       params0$Beta = matrix(NA, nrow = P, ncol = M)
@@ -1243,17 +1234,14 @@ if(sim > (n_sim*3) && sim <= (n_sim*4)){
 
   ELBO_data = list()
   v0 = c(v0_list[1,])
-  #v0 = v0_list
   lambda = lambda_list[1]
   N = N_list[4]
 sim = sim - 3*n_sim
 
 path = paste0(path_general, "N", N, "lambda", lambda, "P", P, "/")
-#path_out2 = paste0(path_out2_general, "N", N, "lambda", lambda, "P", P, "_MCAR/")
 path_data = paste0(path_data_general, "N", N, "lambda", lambda, "P", P, "/")
 
 # Data
-#X = matrix(c(rep(1/2,N/2),rep(-1/2,N/2)), nrow = N, ncol = P)
 if(P==1){
   # P =1
   X = matrix(c(rep(1,N/2),rep(0,N/2)), nrow = N, ncol = P)
@@ -1363,18 +1351,11 @@ for(sim_v0 in n_sim_v0:1){
       ELBO_initial[initial] = params$Q
     }
     params = init_list[[which(ELBO_initial == max(ELBO_initial, na.rm = T))]]
-    #save(init_list, file = sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/init_list%03d.RData", path_general, N, lambda, P, sim) )
-    #save(params, file = sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/init_best%03d.RData", path_general, N, lambda, P, sim) )
-    #write.csv(ELBO_initial, sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/ELBO_initial%03d.csv", path_general, N, lambda, P, sim) )
-    #rm(init_list)
-    #rm(ELBO_initial)
-    #load('/well/nichols/users/fxo071/BLESS/final/SimStudy/BLESS/init/N2000lambda3P2_DPE_back_eps_001/init084.RData')
     
   }
   
   if(sim_v0 != n_sim_v0){
     params0 = list()
-    #params0$Q = as.vector(ELBO_list[(sim_v0+1),])
     params0$beta0 = beta0_list[(sim_v0+1),]
     params0$beta0 = c(params0$beta0)
     params0$Beta = matrix(NA, nrow = P, ncol = M)
@@ -1454,17 +1435,14 @@ for(sim_v0 in n_sim_v0:1){
 if(sim > (n_sim*4) && sim <= (n_sim*5)){
   ELBO_data = list()
   v0 = c(v0_list[1,])
-  #v0 = v0_list
   lambda = lambda_list[1]
   N = N_list[5]
 sim = sim - 4*n_sim
 
 path = paste0(path_general, "N", N, "lambda", lambda, "P", P, "/")
-#path_out2 = paste0(path_out2_general, "N", N, "lambda", lambda, "P", P, "_MCAR/")
 path_data = paste0(path_data_general, "N", N, "lambda", lambda, "P", P, "/")
 
 # Data
-#X = matrix(c(rep(1/2,N/2),rep(-1/2,N/2)), nrow = N, ncol = P)
 if(P==1){
   # P =1
   X = matrix(c(rep(1,N/2),rep(0,N/2)), nrow = N, ncol = P)
@@ -1574,18 +1552,11 @@ for(sim_v0 in n_sim_v0:1){
       ELBO_initial[initial] = params$Q
     }
     params = init_list[[which(ELBO_initial == max(ELBO_initial, na.rm = T))]]
-    #save(init_list, file = sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/init_list%03d.RData", path_general, N, lambda, P, sim) )
-    #save(params, file = sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/init_best%03d.RData", path_general, N, lambda, P, sim) )
-    #write.csv(ELBO_initial, sprintf("%s/init/N%slambda%sP%s_DPE_back_eps0001/ELBO_initial%03d.csv", path_general, N, lambda, P, sim) )
-    #rm(init_list)
-    #rm(ELBO_initial)
-    #load('/well/nichols/users/fxo071/BLESS/final/SimStudy/BLESS/init/N2000lambda3P2_DPE_back_eps_001/init084.RData')
     
   }
   
   if(sim_v0 != n_sim_v0){
     params0 = list()
-    #params0$Q = as.vector(ELBO_list[(sim_v0+1),])
     params0$beta0 = beta0_list[(sim_v0+1),]
     params0$beta0 = c(params0$beta0)
     params0$Beta = matrix(NA, nrow = P, ncol = M)
