@@ -34,9 +34,7 @@ df$marginal <- as.numeric(df$marginal)
 # Plot marginal posterior of gamma under prior v0=0.
 ggplot(df, aes(x=log_v0, y=marginal)) +
   geom_line(size=1.5) + 
-  #geom_line(aes(x, marg_for), col = 'blue', size=1.1) +
   geom_point(size=3) + 
-  #geom_point(aes(x, marg_for), col = 'blue', size=2) +
   theme_bw() +
   theme(axis.line = element_line(colour = "black"),
         panel.grid.major = element_blank(),
@@ -44,7 +42,6 @@ ggplot(df, aes(x=log_v0, y=marginal)) +
         panel.border = element_blank(),
         panel.background = element_blank(),
         text=element_text(size=40) ) +
-        #axis.text.y=element_blank()
   scale_color_manual(values=c('black'))+
   xlab(TeX('$log(\\nu_0)$')) + 
   ylab(TeX('$log(p(\\gamma | y)$')) 
