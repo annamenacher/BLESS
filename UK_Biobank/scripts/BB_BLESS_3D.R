@@ -37,7 +37,7 @@ eps = 0.001
 init = 'DPE'
 
 # Hyperparameter: Spike variance 
-v0 = exp(seq(-10,log(0.05),length.out=5))[1]
+v0 = exp(seq(-10, log(0.05), length.out = 5))[1]
 # Hyperparameter: Slab variance
 v1 = 10
 # Hyperparameter: degrees of freedom for Wishart prior over precision matrix in MCAR prior 
@@ -49,7 +49,7 @@ dir_alpha = 1
 # Number of bootstrap samples to draw.
 B_bootstrap = 1000
 # Concentration parameter of Dirichlet prior to draw weights for every subject in the sample. 
-alpha = rep(dir_alpha,N)
+alpha = rep(dir_alpha, N)
 
 # Set paths.
 # path: folder with data 
@@ -70,7 +70,7 @@ path_BB_results = ""
 # Read in indices of mask, adjacency indices matrix & vector containing number of adjacent neighbors.
 ind_mask = as.numeric(unlist(read.csv(paste0(path_mask, "ind_mask.csv"))[,2]))
 A = data.frame(read.csv(paste0(path_mask, "A_mask.csv"))[,2:3])
-colnames(A) = c('x','y')
+colnames(A) = c('x', 'y')
 n_sj = as.numeric(unlist(read.csv(paste0(path_mask, "n_sj_mask.csv"))[,2]))
 load(paste0(path_mask, "list_ind_mask.RData"))
 
@@ -86,18 +86,18 @@ Y = data.matrix(data.table::fread(paste0(path_data, "Y_mask_N", N, ".csv"), head
 
 
 if(init == 'random'){
-  v0_list = exp(seq(-10,-1, length.out = n_sim))
+  v0_list = exp(seq(-10, -1, length.out = n_sim))
   params0 = list()
-  params0$beta0 = rnorm(M,0,1)
-  params0$Beta = matrix(rnorm(P*M,0,1), nrow = P, ncol = M)
-  params0$Sigma_Inv = 1*diag(P)
-  params0$theta = matrix(rnorm(P*M,0,1), nrow = P, ncol = M)
+  params0$beta0 = rnorm(M, 0, 1)
+  params0$Beta = matrix(rnorm(P * M, 0, 1), nrow = P, ncol = M)
+  params0$Sigma_Inv = 1 * diag(P)
+  params0$theta = matrix(rnorm(P * M, 0, 1), nrow = P, ncol = M)
   params0$v0 = max(v0_list)
   params0$v1 = v1 
   params0$v = P
-  params0$xi = matrix(rnorm(P*M,0,1), nrow = P, ncol = M)
+  params0$xi = matrix(rnorm(P * M, 0, 1), nrow = P, ncol = M)
   params0$sigma_beta0 = sigma_beta0
-  params0$expected_gamma = matrix(0.5,P,M)
+  params0$expected_gamma = matrix(0.5, P, M)
   params0$Q = -3000000000000000000000000
 }
 
@@ -111,14 +111,14 @@ if(init == 'Firth'){
   x[is.na(x)] = 0
   params0$Beta = x
   rm(x)
-  params0$Sigma_Inv = 1*diag(P)
-  params0$theta = matrix(rnorm(P*M,0,1), nrow = P, ncol = M)
+  params0$Sigma_Inv = 1 * diag(P)
+  params0$theta = matrix(rnorm(P * M, 0, 1), nrow = P, ncol = M)
   params0$v0 = v0
   params0$v1 = v1
   params0$v = P
-  params0$xi = matrix(rnorm(P*M,0,1), nrow = P, ncol = M)
+  params0$xi = matrix(rnorm(P * M, 0, 1), nrow = P, ncol = M)
   params0$sigma_beta0 = sigma_beta0
-  params0$expected_gamma = matrix(0.5,P,M)
+  params0$expected_gamma = matrix(0.5, P, M)
   params0$Q = -3000000000000000000000000
 }
 
@@ -146,7 +146,7 @@ if(init == 'DPE'){
 
 # Logit function
 logit = function(x){
-  x = log(x/(1-x))
+  x = log(x / (1 - x))
   return(x)
 }
 
@@ -162,88 +162,88 @@ estimate_BB_BLESS = function(X, Y, params0, eps){
   # degrees of freedom of Wishart prior on covariance matrix of MCAR prior
   v = params0$v
   # Term for evaluation of Wishart covariance matrix.
-  term_ind = matrix(1:(P*P),P,P)
+  term_ind = matrix(1:(P * P), P, P)
   
   # Draw N dirichlet weights to re-weight likelihood.
-  w = N*c(rdirichlet(1,alpha))
+  w = N * c(rdirichlet(1, alpha))
   # Draw perturbation of mean in spike-and-slab prior.
-  mu = rnorm(M*P, 0, sqrt(v0))
-  mu = matrix(mu, P,M)
+  mu = rnorm(M * P, 0, sqrt(v0))
+  mu = matrix(mu, P, M)
   
   # Functions & other quantities
   # Exp-normalize trick to avoid numerical issues with large exponential values.
   exp_normalize = function(x){
     b = max(x)
-    y = exp(x-b)
+    y = exp(x - b)
     return(y / sum(y))
   }
   
   # Logistic function which avoids numerical instabilities.
   logistic = function(x){
-    x = ifelse(x >= 0,1 / ( 1 + exp(-x) ), exp(x) / ( 1 + exp(x) ))
+    x = ifelse(x >= 0, 1 / (1 + exp(-x)), exp(x) / (1 + exp(x)))
     return(x)
   }
   
   # Function to calculate lambda(xi) within the Taylor approximation for acquiring updates of 
   # the sparsity parameter theta. 
   lambda_xi_func = function(x){
-    x = (1/(2*x))*(logistic(x) - (1/2))
+    x = (1 / (2 * x)) * (logistic(x) - (1/2))
     return(x)
   }
   
   # Function to update variance of Beta.
   var_beta_function = function(expected_gamma2){
-    x = solve(XWX + diag(expected_gamma2,P))
+    x = solve(XWX + diag(expected_gamma2, P))
     return(x)
   }
   
   # Function to update spatially-varying parameters.
   Beta_function = function(j){
-    x = matrix(var_Beta[,j],P,P) %*%(XW%*%(expected_Z[,j] - beta0[j])+ diag(expected_gamma2[,j],P)%*%matrix(mu[,j],P,1))
+    x = matrix(var_Beta[,j], P, P) %*% (XW %*% (expected_Z[,j] - beta0[j]) + diag(expected_gamma2[,j], P) %*% matrix(mu[,j], P, 1))
     return(x)
   }
   
   # Function to update gamma values (probability of inclusion). 
   gamma_function = function(j){
-    active = (-0.5*log(v1) - (matrix(diag(matrix(var_Beta[,j],P,P)), nrow = P, ncol = 1) + Beta[,j]^2- 2*Beta[,j]*mu[,j] + mu[,j]^2)/(2*v1) + theta[,j])
-    not_active = (-0.5*log(v0) - (matrix(diag(matrix(var_Beta[,j],P,P)), nrow = P, ncol = 1) + Beta[,j]^2- 2*Beta[,j]*mu[,j] + mu[,j]^2)/(2*v0))
-    x = apply(matrix(1:P, nrow=P), 1, function(p) exp_normalize(c(active[p],not_active[p]))[1])
+    active = ((-0.5) * log(v1) - (matrix(diag(matrix(var_Beta[,j], P, P)), nrow = P, ncol = 1) + Beta[,j]^2 - 2 * Beta[,j] * mu[,j] + mu[,j]^2)/(2 * v1) + theta[,j])
+    not_active = ((-0.5) * log(v0) - (matrix(diag(matrix(var_Beta[,j], P, P)), nrow = P, ncol = 1) + Beta[,j]^2 - 2 * Beta[,j] * mu[,j] + mu[,j]^2)/(2 * v0))
+    x = apply(matrix(1:P, nrow = P), 1, function(p) exp_normalize(c(active[p], not_active[p]))[1])
     return(x)
   }
   
   # Function to sum neighboring values together.
   sum_si_sj_function = function(j){
-    x = matrix(apply(matrix(theta[,list_ind[[j]]],nrow=P),1,sum),nrow=P)
+    x = matrix(apply(matrix(theta[,list_ind[[j]]], nrow = P), 1, sum), nrow = P)
     return(x)
   }
   
   # Function to update variational parameter xi.
   xi_function = function(j){
-    x = sqrt((diag(matrix(Sigma_theta[,j],P,P) + theta[,j]%*%t(theta[,j]))))
+    x = sqrt((diag(matrix(Sigma_theta[,j], P, P) + theta[,j] %*% t(theta[,j]))))
     return(x)
   }
   
   # Initialize counter for number of iterations of optimization.
   counter = 0
   # Initialize difference in ELBO values to large value.
-  diff=100
+  diff = 100
   # Set parameters & hyperparameters to initial values.
   sigma_beta0 = params0$sigma_beta0
-  beta0=params0$beta0
-  Beta=params0$Beta
+  beta0 = params0$beta0
+  Beta = params0$Beta
   Sigma_Inv = params0$Sigma_Inv
   theta = params0$theta
   xi = params0$xi
   expected_gamma = params0$expected_gamma
-  expected_gamma2 = (expected_gamma/v1) + ((1-expected_gamma)/v0)
+  expected_gamma2 = (expected_gamma / v1) + ((1 - expected_gamma) / v0)
   ELBO = NA
   Q = -3000000000000000000000000000
   # Quantities that are not memory intensive to store and evaluated in every iteration of the optimization below.
-  XW = t(sweep(X,1,w,FUN=`*`))
-  XWX = t(sweep(X,1,sqrt(w),FUN=`*`))%*%sweep(X,1,sqrt(w),FUN=`*`)
+  XW = t(sweep(X, 1, w, FUN = `*`))
+  XWX = t(sweep(X, 1, sqrt(w), FUN = `*`))%*%sweep(X, 1, sqrt(w), FUN = `*`)
   
   # Run optimization until convergence criteria is reached.
-  while(diff>eps){ 
+  while(diff > eps){ 
     
     # Avoid memory issues by clearing unnecessairly loaded quantities every iteration of the optimization.
     gc()    
@@ -257,43 +257,43 @@ estimate_BB_BLESS = function(X, Y, params0, eps){
  
     # Update Z.
     expected_Z = structure(hutils::if_else(Y == 1,
-                                           (cbind(rep(1,N), X) %*% rbind(beta0, Beta))  +
-                                             (structure(dnorm(-(cbind(rep(1,N), X) %*% rbind(beta0, Beta)) , mean = 0, sd=1),dim=c(N,M)) /
-                                                (structure(pnorm((cbind(rep(1,N), X) %*% rbind(beta0, Beta)), mean = 0, sd=1)+ 10^(-10),dim=c(N,M)))) ,
-                                           (cbind(rep(1,N), X) %*% rbind(beta0, Beta)) - (structure(dnorm(-(cbind(rep(1,N), X) %*% rbind(beta0, Beta)), mean = 0, sd=1),dim=c(N,M)) /
-                                                                                            (1 - structure(pnorm((cbind(rep(1,N), X) %*% rbind(beta0, Beta)), mean = 0, sd=1),dim=c(N,M))+ 10^(-10))) ),
-                           dim=c(N,M))
+                                           (cbind(rep(1, N), X) %*% rbind(beta0, Beta))  +
+                                             (structure(dnorm(-(cbind(rep(1, N), X) %*% rbind(beta0, Beta)) , mean = 0, sd = 1),dim = c(N, M)) /
+                                                (structure(pnorm((cbind(rep(1, N), X) %*% rbind(beta0, Beta)), mean = 0, sd = 1)+ 10^(-10),dim = c(N, M)))) ,
+                                           (cbind(rep(1, N), X) %*% rbind(beta0, Beta)) - (structure(dnorm(-(cbind(rep(1, N), X) %*% rbind(beta0, Beta)), mean = 0, sd = 1), dim = c(N, M)) /
+                                                                                            (1 - structure(pnorm((cbind(rep(1, N), X) %*% rbind(beta0, Beta)), mean = 0, sd = 1), dim = c(N, M))+ 10^(-10))) ),
+                           dim = c(N, M))
     
     # If this quantity diverges to infinity then set to really large or small value.
     expected_Z[expected_Z == -Inf] = -15
     expected_Z[expected_Z == Inf] = 15
     
     # Update beta0.
-    beta0 = (1/(sum(w) + 1/sigma_beta0^2))*(as.vector(matrix(w,1,N)%*%(expected_Z - X%*%Beta)))
+    beta0 = (1/(sum(w) + 1/sigma_beta0^2)) * (as.vector(matrix(w, 1, N) %*% (expected_Z - X%*%Beta)))
     
     # Update variance of Beta.
-    var_Beta  = apply(expected_gamma2, 2, FUN=var_beta_function)
+    var_Beta  = apply(expected_gamma2, 2, FUN = var_beta_function)
     
     # Update beta.
-    Beta=apply(matrix(1:M,nrow=M),1,Beta_function)
+    Beta=apply(matrix(1:M, nrow = M), 1, Beta_function)
     
     # Update gamma.
-    expected_gamma = apply(matrix(1:M,nrow=M),1,gamma_function)
+    expected_gamma = apply(matrix(1:M, nrow = M), 1, gamma_function)
     
     # Update expectation: E[gamma*(1/v1) + (1-gamma)*(1/v0)]
     expected_gamma2 = (expected_gamma/v1) + ((1-expected_gamma)/v0)
     
     # Update theta
-    sum_si_sj = apply(matrix(1:M,nrow=M),1,sum_si_sj_function)
-    Sigma_theta = apply(matrix(1:M,nrow=M),1,function(j) as.vector(solve(n_sj[j]*Sigma_Inv + 2*diag(c(lambda_xi_func(xi[,j])),P))))
-    theta = apply(matrix(1:M,nrow=M),1,function(j) matrix(Sigma_theta[,j],P,P)%*%(Sigma_Inv%*%sum_si_sj[,j] + expected_gamma[,j] - 1/2))
+    sum_si_sj = apply(matrix(1:M, nrow = M), 1, sum_si_sj_function)
+    Sigma_theta = apply(matrix(1:M, nrow = M), 1, function(j) as.vector(solve(n_sj[j]*Sigma_Inv + 2*diag(c(lambda_xi_func(xi[,j])), P))))
+    theta = apply(matrix(1:M, nrow = M), 1, function(j) matrix(Sigma_theta[,j], P, P)%*%(Sigma_Inv%*%sum_si_sj[,j] + expected_gamma[,j] - 1/2))
     
     # Update Sigma Inverse.
-    term = matrix((theta[,A$x] - theta[,A$y]),P)%*%t(matrix((theta[,A$x] - theta[,A$y]),P)) + matrix(rowSums(Sigma_theta[,A$y]),P)
+    term = matrix((theta[,A$x] - theta[,A$y]), P)%*%t(matrix((theta[,A$x] - theta[,A$y]), P)) + matrix(rowSums(Sigma_theta[,A$y]), P)
     Sigma_Inv = (M + v - P - 1)*solve(diag(P) + term)
     
     # Update xi.
-    xi = apply(matrix(1:M, nrow=M), 1, xi_function)
+    xi = apply(matrix(1:M, nrow = M), 1, xi_function)
     
     Eta = 0
     diff = max(abs(Beta - Beta_old))
@@ -351,7 +351,7 @@ estimate_BB_BLESS = function(X, Y, params0, eps){
 for(sim in 1:B){
 
 # Run BB-BLESS optimaization.
-params = estimate_BB_BLESS(X,Y,params0,eps)
+params = estimate_BB_BLESS(X, Y, params0, eps)
 params$v0 = v0
 params$v1 = v1
 
@@ -366,7 +366,7 @@ ind1 = which(mask == 1, arr.ind = T)
 
 img_filler = rep(NA, dim1*dim2*dim3)
 img_filler[ind1] = as.numeric(unlist(params$Beta[1,]))
-img_NA@.Data = array(img_filler, c(dim1,dim2,dim3))
+img_NA@.Data = array(img_filler, c(dim1, dim2, dim3))
 writeNIfTI(img_NA, sprintf('%sBeta%04d', path_BB_results, sim))
 rm(img_NA)
 
