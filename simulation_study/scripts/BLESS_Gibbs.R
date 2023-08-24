@@ -57,7 +57,7 @@ init = 'truth'
 v0_idx = 12
 # Range of spike variances over which DPE was run (in simulation studies: range of 15 spike variances over exp(-20) to exp(-1)). 
 #v0 = as.numeric(unlist(read.csv(paste0(path_BLESS, 'v0.csv'))[,2]))
-v0 = exp(seq(-20,-1,length.out=15))
+v0 = exp(seq(-20, -1, length.out = 15))
 v0 = v0[v0_idx]
 # Hyperparameter: slab variance
 v1 = 10
@@ -69,15 +69,15 @@ sigma_beta0 = 10
 n_start = 2
 
 # Data
-X = matrix(cbind(c(rep(1,N/2),rep(0,N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))),2)), nrow = N, ncol = P)
+X = matrix(cbind(c(rep(1, N/2), rep(0, N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))), 2)), nrow = N, ncol = P)
 Y = data.matrix(read.csv(paste0(path_data, "Y", dataset, ".csv"), header = T)[,2:(M+1)])
 # Number of lesion occurences over sample size at voxel s_j.
-N1 = apply(Y,2,sum)
+N1 = apply(Y, 2, sum)
 # Number of no lesions occurrences over sample size at voxel s_j.
 N0 = N - N1
 
 # Initialization
-if(init=='Firth'){
+if(init == 'Firth'){
   params0 = list()
   x = as.numeric(unlist(read.csv(paste0(path_Firth, 'beta0.csv'))[dataset,2:(M+1)]))
   x[is.na(x)] = 0
@@ -100,7 +100,7 @@ if(init=='Firth'){
   params0$xi = matrix(params0$theta^2, nrow = P, ncol = M)
   params0$v0 = v0
   params0$v1 = v1
-  params0$z = (cbind(rep(1,N), X) %*% rbind(params0$beta0, params0$beta))
+  params0$z = (cbind(rep(1, N), X) %*% rbind(params0$beta0, params0$beta))
   params0$sigma_beta0 = sigma_beta0
 }
 
@@ -124,7 +124,7 @@ if(init=='truth'){
   params0$xi = matrix(params0$theta^2, nrow = P, ncol = M)
   params0$v0 = v0
   params0$v1 = v1
-  params0$z = (cbind(rep(1,N), X) %*% rbind(params0$beta0, params0$beta))
+  params0$z = (cbind(rep(1, N), X) %*% rbind(params0$beta0, params0$beta))
   params0$sigma_beta0 = sigma_beta0
 }
 
@@ -147,7 +147,7 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   
   # Logistic function (this specification avoids numerical issues)
   logistic = function(x){
-    x = ifelse(x >= 0,1 / ( 1 + exp(-x) ), exp(x) / ( 1 + exp(x) ))
+    x = ifelse(x >= 0, 1 / ( 1 + exp(-x) ), exp(x) / ( 1 + exp(x) ))
     return(x)
   }
   
@@ -163,9 +163,9 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   adjacency_matrix = function(dim1, dim2, dim3){
     
     if(missing(dim3)){
-      A = data.frame(x=integer(),y=integer())
+      A = data.frame(x = integer(), y = integer())
       ind = 1:(dim1*dim2)
-      conv = as.vector(matrix(1:(dim1*dim2),dim1,dim2, byrow = T))
+      conv = as.vector(matrix(1:(dim1*dim2), dim1, dim2, byrow = T))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -173,31 +173,31 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
         left = i - 1
         right = i + 1
         if (up > 0){
-          A = rbind(A,c(i,up))
+          A = rbind(A, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A = rbind(A,c(i,down))
+          A = rbind(A, c(i, down))
         }
         if (left %% dim2 != 0){
-          A = rbind(A,c(i,left))
+          A = rbind(A, c(i, left))
         }
         if (i %% dim2 != 0){
-          A = rbind(A,c(i,right))
+          A = rbind(A, c(i, right))
         }
       }
-      colnames(A) = c('x','y')
+      colnames(A) = c('x', 'y')
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[which(conv==A$x[i],arr.ind = T)]
-        Ay[i] = ind[which(conv==A$y[i],arr.ind = T)]
+        Ax[i] = ind[which(conv == A$x[i], arr.ind = T)]
+        Ay[i] = ind[which(conv == A$y[i], arr.ind = T)]
       }
       A$x = Ax
       A$y = Ay
     } else{
-      A_2D = data.frame(x=integer(),y=integer())
+      A_2D = data.frame(x = integer(), y = integer())
       ind = 1:(dim1*dim2*dim3)
-      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim=c(dim2,dim1,dim3)), perm=c(2,1,3)))
+      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim = c(dim2, dim1, dim3)), perm = c(2, 1, 3)))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -205,20 +205,20 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
         left = i - 1
         right = i + 1
         if (up > 0){
-          A_2D = rbind(A_2D,c(i,up))
+          A_2D = rbind(A_2D, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A_2D = rbind(A_2D,c(i,down))
+          A_2D = rbind(A_2D, c(i, down))
         }
         if (left %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,left))
+          A_2D = rbind(A_2D, c(i, left))
         }
         if (i %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,right))
+          A_2D = rbind(A_2D, c(i, right))
         }
       }
-      colnames(A_2D) = c('x','y')
-      A = data.frame(x=integer(),y=integer())
+      colnames(A_2D) = c('x', 'y')
+      A = data.frame(x = integer(), y = integer())
       for (k in 0:(dim3-1)) {
         A = rbind(A, (A_2D + (k*dim1*dim2)))
       }
@@ -226,17 +226,17 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
         bottom = i - dim1*dim2
         top = i + dim1*dim2
         if(bottom > 0){
-          A = rbind(A,c(i,bottom))
+          A = rbind(A, c(i, bottom))
         }
         if(top <= (dim1*dim2*dim3)){
-          A = rbind(A,c(i,top))
+          A = rbind(A, c(i, top))
         }
       }
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[conv==A$x[i]]
-        Ay[i] = ind[conv==A$y[i]]
+        Ax[i] = ind[conv == A$x[i]]
+        Ay[i] = ind[conv == A$y[i]]
       }
       A$x = Ax
       A$y = Ay
@@ -245,13 +245,13 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   }
   
   # Indices of adjacency matrix of 2D lattice.
-  A = adjacency_matrix(dim1,dim2)
+  A = adjacency_matrix(dim1, dim2)
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
     
     if(missing(dim3)){
-      if (dim1<3 | dim2<3){ 
+      if (dim1 < 3 | dim2 < 3){ 
         stop("Image dimensions need to be greater than 2!")
       }
       n_sj = matrix(4, nrow = dim1, ncol = dim2)
@@ -259,7 +259,7 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
       n_sj[2:(dim1-1),1] = n_sj[2:(dim1-1),dim2] = n_sj[1,2:(dim2-1)] = n_sj[dim1,2:(dim2-1)] = 3
       n_sj = as.vector(n_sj)
     } else{
-      if (dim1<3 | dim2<3 | dim3<3){ 
+      if (dim1 < 3 | dim2 < 3 | dim3 < 3){ 
         stop("Image dimensions need to be greater than 2!")
       }
       n_sj = array(6, c(dim1, dim2, dim3))
@@ -276,7 +276,7 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   }
  
   # Number of neighbors of 2D lattice.
-  n_sj = n_neighbors(dim1,dim2)
+  n_sj = n_neighbors(dim1, dim2)
   
   # Function to acquire indices of upper triangular of adjacency matrix.
   upper_triangular = function(A, M){
@@ -338,7 +338,7 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
       mu_z_j = X %*% matrix(beta[,j],P,1) + c(beta0[j])
       z_j = z[,j]
       y_j = Y[,j]
-      if(N1[j]==0){
+      if(N1[j] == 0){
         z_j[y_j == 0] = rtruncnorm(N0[j], mean = mu_z_j[y_j == 0], sd = 1, a = -Inf, b = 0)
       } else{
         z_j[y_j == 0] = rtruncnorm(N0[j], mean = mu_z_j[y_j == 0], sd = 1, a = -Inf, b = 0)
@@ -360,30 +360,30 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
       beta0[j] = rnorm(1, mean_beta0, sqrt(V_beta0))
       
       # Calculate posterior mean of Bernoulli.
-      l0 = dnorm(c(beta[,j]),0,sqrt(v0))*logistic(1-c(theta[,j]))
-      l1 = dnorm(c(beta[,j]),0,sqrt(v1))*logistic(c(theta[,j]))
+      l0 = dnorm(c(beta[,j]), 0, sqrt(v0))*logistic(1-c(theta[,j]))
+      l1 = dnorm(c(beta[,j]), 0, sqrt(v1))*logistic(c(theta[,j]))
       
       # Draw variable gamma from its full conditional: gamma | theta, beta
       gamma[,j] = rbinom((l1/(l0 + l1)), 1, (l1/(l0 + l1)))
       
       # Draw variable gamma from its full conditional: theta | Sigma_Inv, xi
       ind = c(A$y[which(A$x == j, arr.ind = T)], A$x[which(A$y == j, arr.ind = T)])
-      sum_si_sj[,j] = matrix(apply(matrix(theta[,ind],nrow=P),1,sum),nrow=P)
-      var_theta = solve(n_sj[j]*Sigma_Inv + 2*diag(c(lambda_xi_func(xi[,j])),P))
-      mu_theta = var_theta%*%(Sigma_Inv%*%matrix(sum_si_sj[,j],P,1) + gamma[,j] - (1/2))
+      sum_si_sj[,j] = matrix(apply(matrix(theta[,ind], nrow = P), 1, sum), nrow = P)
+      var_theta = solve(n_sj[j]*Sigma_Inv + 2*diag(c(lambda_xi_func(xi[,j])), P))
+      mu_theta = var_theta%*%(Sigma_Inv%*%matrix(sum_si_sj[,j], P, 1) + gamma[,j] - (1/2))
       theta[,j] = c(rmvnorm(1, mu_theta, var_theta))
       xi[,j] = sqrt(diag(var_theta) + theta[,j]^2)
       }
     
     # Draw variable gamma from its full conditional: Sigma_Inv | theta
-    term = matrix((theta[,A$x] - theta[,A$y]),P)%*%t(matrix((theta[,A$x] - theta[,A$y]),P))
+    term = matrix((theta[,A$x] - theta[,A$y]), P)%*%t(matrix((theta[,A$x] - theta[,A$y]), P))
       
     v = M - 1 
     I = solve(diag(P) + term)
     Sigma_Inv = matrix(rWishart(1, v, I), P, P)
     
     # Don't save burn-in samples (lessen memory cost)
-    if(t>(burn_in)){
+    if(t > (burn_in)){
         # Store the beta draws.
         beta0_chain[(t-burn_in), ] = as.vector(beta0)
         beta1_chain[(t-burn_in), ] = as.vector(beta[1,])
