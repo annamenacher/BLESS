@@ -30,10 +30,9 @@ P = 4
 
 # Set paths.
 # path: folder containing data
-path = paste0("/well/nichols/users/fxo071/BLESS/UKBB_3D/study_N2000/Firth_data/N", N, "/")
-path_data = "/well/nichols/users/fxo071/BLESS/UKBB_3D/study_N2000/data/"
+path = path_data = ""
 # path: folder with mask 
-path_mask = paste0("/well/nichols/users/fxo071/BLESS/UKBB_3D/mask/")
+path_mask = ""
 
 # Read in indices of mask
 ind_mask = as.numeric(unlist(read.csv(paste0(path_mask, "ind_mask.csv"))[,2]))
@@ -61,7 +60,7 @@ for(j in 1:M){
     data = data.frame(cbind(Y[,j], X))
     colnames(data) = c('y','x1','x2','x3','x4')
     
-    model = glm(y ~ 1 + x1 + x2 + x3 + x4, family = binomial(probit), data = data, method = "brglmFit", type='AS_mean', maxit = 10000, epsilon = 1e-05, slowit=0.5)
+    model = glm(y ~ 1 + x1 + x2 + x3 + x4, family = binomial(probit), data = data, method = "brglmFit", type = 'AS_mean', maxit = 10000, epsilon = 1e-05, slowit = 0.5)
                   model = summary(model)
     params_Firth[,j] = model$coefficients[,1]
     var_Firth[,j] = model$coefficients[,2]
