@@ -59,10 +59,10 @@ path_plots = ''
 
 # Voxel locations that are not on the border of an image (due to setup of simulation study, they are not homogeneously distributed and should hence 
 # be excluded from the evaluation)
-idx = c(1:100,2401:2500,1151:1350,seq(1,2451,50),seq(2,2452,50),seq(49,2499,50),seq(50,2500,50),seq(24,2474,50),seq(25,2475,50),seq(26,2476,50),seq(27,2477,50))
+idx = c(1:100, 2401:2500, 1151:1350, seq(1,2451,50), seq(2,2452,50), seq(49,2499,50), seq(50,2500,50), seq(24,2474,50), seq(25,2475,50), seq(26,2476,50), seq(27,2477,50))
  
 # Data
-X = matrix(cbind(c(rep(1,N/2),rep(0,N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))),2)), nrow = N, ncol = P)
+X = matrix(cbind(c(rep(1, N/2), rep(0,N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))), 2)), nrow = N, ncol = P)
 
 # Truth
 load(paste0(path_truth, "/truth.RData"))
@@ -99,7 +99,7 @@ mean_beta_emvs_bless = result_BLESS$Beta
 
 sd_beta_emvs_bless = matrix(NA, P*P, M)
 for(j in 1:M){
-sd_beta_emvs_bless[,j] = as.vector(solve(t(X)%*%X + diag(result_BLESS$expected_gamma2[,j],P)))
+sd_beta_emvs_bless[,j] = as.vector(solve(t(X)%*%X + diag(result_BLESS$expected_gamma2[,j], P)))
 }
 
 result_BLESS_sample_beta1 = matrix(NA, 1000, M)
@@ -107,7 +107,7 @@ result_BLESS_sample_beta2 = matrix(NA, 1000, M)
 
 for(i in 1:1000){
   for(j in 1:M){
-  samp = mvrnorm(1, mean_beta_emvs_bless[,j], matrix(sd_beta_emvs_bless[,j],P,P))
+  samp = mvrnorm(1, mean_beta_emvs_bless[,j], matrix(sd_beta_emvs_bless[,j], P, P))
   result_BLESS_sample_beta1[i,j] = samp[1]
   result_BLESS_sample_beta2[i,j] = samp[2]
   } }
@@ -143,12 +143,12 @@ voxel = 425
 options(repr.plot.width = 20, repr.plot.height = 8)
 feature = 'n'
 label_column = 'Legend'
-idx_outlier=1
-a = data.frame(n=result_Gibbs_Probit$beta_chain[,voxel], Legend=rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
-b = data.frame(n=result_BLESS_sample_beta1[,voxel], Legend=rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
-c = data.frame(n=result_BB_random$beta_chain[,voxel], Legend=rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
+idx_outlier = 1
+a = data.frame(n=result_Gibbs_Probit$beta_chain[,voxel], Legend = rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
+b = data.frame(n=result_BLESS_sample_beta1[,voxel], Legend = rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
+c = data.frame(n=result_BB_random$beta_chain[,voxel], Legend = rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
 
-df = do.call('rbind', list(a,b,c))
+df = do.call('rbind', list(a, b, c))
 means = mean_df = c(mean(a$n), mean(b$n), mean(c$n))
 
 if(voxel > 1251){
@@ -161,24 +161,24 @@ truth_voxel = (sum(beta1_truth[(dimension/2+3):(dimension-2),(3):(dimension/2-2)
 
 pdf(paste0(path_plots, "BB_BLESS_hist_voxel", voxel, '.pdf'), width = 10, height = 10)
 
-plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
+plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
   
-  geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-    geom_density(alpha=0)+
-    geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
-    labs(x='Beta', y = "Density") +
-    theme(plot.background=element_rect(fill = "white", color=NA),
+  geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+    geom_density(alpha = 0)+
+    geom_vline(xintercept = means, color = c('#F8766D', '#00BA38', '#619CFF'), linetype = "solid", size = 1) +
+    labs(x = 'Beta', y = "Density") +
+    theme(plot.background = element_rect(fill = "white", color = NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank(),
           legend.position = c(0.85, 0.87),
-          text=element_text(size=27.5)) + 
+          text=element_text(size = 27.5)) + 
     ggtitle(paste0("Voxel ", voxel)) +
     xlab('Beta')
-  plt = plt + guides(fill=guide_legend(title=label_column))
-  plt = plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-               linetype="solid", size=1)
+  plt = plt + guides(fill = guide_legend(title = label_column))
+  plt = plt + geom_vline(data = data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept = truth_voxel),
+               linetype = "solid", size = 1)
   plt
 dev.off()
 
@@ -187,12 +187,12 @@ voxel = 1025
 options(repr.plot.width = 20, repr.plot.height = 8)
 feature = 'n'
 label_column = 'Legend'
-idx_outlier=1
-a = data.frame(n=result_Gibbs_Probit$beta_chain[,voxel], Legend=rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
-b = data.frame(n=result_BLESS_sample_beta1[,voxel], Legend=rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
-c = data.frame(n=result_BB_random$beta_chain[,voxel], Legend=rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
+idx_outlier = 1
+a = data.frame(n = result_Gibbs_Probit$beta_chain[,voxel], Legend = rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
+b = data.frame(n = result_BLESS_sample_beta1[,voxel], Legend = rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
+c = data.frame(n = result_BB_random$beta_chain[,voxel], Legend = rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
 
-df = do.call('rbind', list(a,b,c))
+df = do.call('rbind', list(a, b, c))
 means = mean_df = c(mean(a$n), mean(b$n), mean(c$n))
 
 if(voxel > 1251){
@@ -205,24 +205,24 @@ if(voxel > 1251){
 
 pdf(paste0(path_plots, "BB_BLESS_hist_voxel", voxel, '.pdf'), width = 10, height = 10)
 
-plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
+plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
   
-  geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-  geom_density(alpha=0)+
-  geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
-  labs(x='Beta', y = "Density") +
-  theme(plot.background=element_rect(fill = "white", color=NA),
+  geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+  geom_density(alpha = 0)+
+  geom_vline(xintercept = means, color = c('#F8766D', '#00BA38', '#619CFF'), linetype = "solid", size = 1) +
+  labs(x = 'Beta', y = "Density") +
+  theme(plot.background = element_rect(fill = "white", color = NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         legend.position = c(0.85, 0.87),
-        text=element_text(size=27.5)) + 
+        text=element_text(size = 27.5)) + 
   ggtitle(paste0("Voxel ", voxel)) +
   xlab('Beta')
-plt = plt + guides(fill=guide_legend(title=label_column))
-plt = plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-                       linetype="solid", size=1)
+plt = plt + guides(fill = guide_legend(title = label_column))
+plt = plt + geom_vline(data = data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept = truth_voxel),
+                       linetype = "solid", size = 1)
 plt
 dev.off()
 
@@ -231,12 +231,12 @@ voxel = 1525
 options(repr.plot.width = 20, repr.plot.height = 8)
 feature = 'n'
 label_column = 'Legend'
-idx_outlier=1
-a = data.frame(n=result_Gibbs_Probit$beta_chain[,voxel], Legend=rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
-b = data.frame(n=result_BLESS_sample_beta1[,voxel], Legend=rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
-c = data.frame(n=result_BB_random$beta_chain[,voxel], Legend=rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
+idx_outlier = 1
+a = data.frame(n = result_Gibbs_Probit$beta_chain[,voxel], Legend = rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
+b = data.frame(n = result_BLESS_sample_beta1[,voxel], Legend = rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
+c = data.frame(n = result_BB_random$beta_chain[,voxel], Legend = rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
 
-df = do.call('rbind', list(a,b,c))
+df = do.call('rbind', list(a, b, c))
 means = mean_df = c(mean(a$n), mean(b$n), mean(c$n))
 
 if(voxel > 1251){
@@ -249,24 +249,24 @@ if(voxel > 1251){
 
 pdf(paste0(path_plots, "BB_BLESS_hist_voxel", voxel, '.pdf'), width = 10, height = 10)
 
-plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
+plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
   
-  geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-  geom_density(alpha=0)+
-  geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
-  labs(x='Beta', y = "Density") +
-  theme(plot.background=element_rect(fill = "white", color=NA),
+  geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+  geom_density(alpha = 0)+
+  geom_vline(xintercept = means, color = c('#F8766D', '#00BA38', '#619CFF'), linetype = "solid", size = 1) +
+  labs(x = 'Beta', y = "Density") +
+  theme(plot.background = element_rect(fill = "white", color = NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         legend.position = c(0.85, 0.87),
-        text=element_text(size=27.5)) + 
+        text=element_text(size = 27.5)) + 
   ggtitle(paste0("Voxel ", voxel)) +
   xlab('Beta')
-plt = plt + guides(fill=guide_legend(title=label_column))
-plt = plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-                       linetype="solid", size=1)
+plt = plt + guides(fill = guide_legend(title = label_column))
+plt = plt + geom_vline(data = data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))), aes(xintercept = truth_voxel),
+                       linetype = "solid", size = 1)
 plt
 dev.off()
 
@@ -275,12 +275,12 @@ voxel = 2025
 options(repr.plot.width = 20, repr.plot.height = 8)
 feature = 'n'
 label_column = 'Legend'
-idx_outlier=1
-a = data.frame(n=result_Gibbs_Probit$beta_chain[,voxel], Legend=rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
-b = data.frame(n=result_BLESS_sample_beta1[,voxel], Legend=rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
-c = data.frame(n=result_BB_random$beta_chain[,voxel], Legend=rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
+idx_outlier = 1
+a = data.frame(n = result_Gibbs_Probit$beta_chain[,voxel], Legend = rep('Gibbs', length(result_Gibbs_Probit$beta_chain[,voxel])))
+b = data.frame(n = result_BLESS_sample_beta1[,voxel], Legend = rep('BLESS-VI', length(result_BLESS_sample_beta1[,voxel])))
+c = data.frame(n = result_BB_random$beta_chain[,voxel], Legend = rep('BB-BLESS', length(result_BB_random$beta_chain[,voxel])))
 
-df = do.call('rbind', list(a,b,c))
+df = do.call('rbind', list(a, b, c))
 means = mean_df = c(mean(a$n), mean(b$n), mean(c$n))
 
 if(voxel > 1251){
@@ -293,24 +293,24 @@ if(voxel > 1251){
 
 pdf(paste0(path_plots, "BB_BLESS_hist_voxel", voxel, '.pdf'), width = 10, height = 10)
 
-plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
+plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
   
-  geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-  geom_density(alpha=0)+
-  geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
-  labs(x='Beta', y = "Density") +
-  theme(plot.background=element_rect(fill = "white", color=NA),
+  geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+  geom_density(alpha = 0)+
+  geom_vline(xintercept = means, color = c('#F8766D', '#00BA38', '#619CFF'), linetype = "solid", size = 1) +
+  labs(x = 'Beta', y = "Density") +
+  theme(plot.background = element_rect(fill = "white", color = NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(),
         legend.position = c(0.85, 0.87),
-        text=element_text(size=27.5)) + 
+        text=element_text(size = 27.5)) + 
   ggtitle(paste0("Voxel ", voxel)) +
   xlab('Beta')
-plt = plt + guides(fill=guide_legend(title=label_column))
-plt = plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-                       linetype="solid", size=1)
+plt = plt + guides(fill = guide_legend(title = label_column))
+plt = plt + geom_vline(data = data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))), aes(xintercept = truth_voxel),
+                       linetype = "solid", size = 1)
 plt
 dev.off()
 
@@ -321,10 +321,10 @@ dev.off()
 # Functions.
 new_x = c()
 for(i in 1:dimension){
-  rep_x = rep(i,dimension)
+  rep_x = rep(i, dimension)
   new_x = append(new_x, rep_x)
 }
-new_y = rep(rev(1:dimension),dimension)
+new_y = rep(rev(1:dimension), dimension)
 
 jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F", "yellow", "#FF7F00", "red", "#7F0000"))
 
@@ -351,8 +351,8 @@ plot_binary_image = function(empirical_matrix){
   df$y = new_y
   df$value = as.factor(df$value)
   ggplot(df, aes(x = x, y = y)) + 
-    geom_raster(aes(fill=factor(value))) +
-    scale_fill_manual(values=c("0"="black", "1"="white"), guide="none") +
+    geom_raster(aes(fill = factor(value))) +
+    scale_fill_manual(values=c("0" = "black", "1" = "white"), guide = "none") +
     theme_void()
 }
 
@@ -401,12 +401,12 @@ scatter_plot_comparison = function(params1, params2, model_names, title){
   x_min = y_min = min(c(min(params1), min(params2)))
   x_max = y_max = max(c(max(params1), max(params2)))
   
-  ggplot(df, aes(x= params1, y=params2)) +
-    geom_point(shape=20) + 
+  ggplot(df, aes(x = params1, y = params2)) +
+    geom_point(shape = 20) + 
     theme_classic() + 
     geom_abline(intercept = 0) + 
-    xlim(x_min,x_max) + 
-    ylim(y_min,y_max) +
+    xlim(x_min, x_max) + 
+    ylim(y_min, y_max) +
     xlab(params1_name) + 
     ylab(params2_name) +
     theme(text = element_text(size = 18)) +
@@ -416,22 +416,22 @@ scatter_plot_comparison = function(params1, params2, model_names, title){
 # Plot for creating boxplot comparing set of values params1 vs params2 vs params3 vs params4.
 boxplot_comparison = function(params1, params2, params3, params4, model_names, title){
   
-  model = c(rep(model_names[2],length(c(1:2500)[-idx])), rep(model_names[3],length(c(1:2500)[-idx])), rep(model_names[4],length(c(1:2500)[-idx])))
-  params1 = rep(params1,3)
+  model = c(rep(model_names[2], length(c(1:2500)[-idx])), rep(model_names[3], length(c(1:2500)[-idx])), rep(model_names[4], length(c(1:2500)[-idx])))
+  params1 = rep(params1, 3)
   params2 = c(params2, params3, params4)
   df = cbind2(params1, params2)
   df = df[complete.cases(df),]
   df = data.frame(df)
   colnames(df) = c('Effect' , 'Beta')
-  df$Effect = round(c(df$Effect),3)
+  df$Effect = round(c(df$Effect), 3)
   df$Effect = as.factor(df$Effect)
   df$Model = model
   
-  ggplot(df,aes(x=Model, y=Beta)) +
-    geom_boxplot(aes(fill=Effect)) +
+  ggplot(df,aes(x = Model, y = Beta)) +
+    geom_boxplot(aes(fill = Effect)) +
     theme_minimal() + 
-    labs(x='Model', y = 'Beta') +
-    ylim(-0.25,1.25) +
+    labs(x = 'Model', y = 'Beta') +
+    ylim(-0.25, 1.25) +
     ggtitle(title)
 }
 
@@ -472,60 +472,60 @@ dev.off()
 
 # Comparison of Gibbs vs BB-BLESS
 pdf("scatterplot_mean_Gibbs_BB_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain,2,mean)[-idx], mean_bb_bless[-idx],c('Gibbs','BB-BLESS'), paste0('Mean: Beta', beta_idx))
+scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain, 2, mean)[-idx], mean_bb_bless[-idx], c('Gibbs', 'BB-BLESS'), paste0('Mean: Beta', beta_idx))
 dev.off()
 # Comparison of Gibbs vs BLESS-VI
 pdf("scatterplot_mean_Gibbs_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain,2,mean)[-idx], apply(result_BLESS_sample, 2, mean)[-idx],c('Gibbs','BLESS-VI'), paste0('Mean: Beta', beta_idx))
+scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain, 2, mean)[-idx], apply(result_BLESS_sample, 2, mean)[-idx], c('Gibbs', 'BLESS-VI'), paste0('Mean: Beta', beta_idx))
 dev.off()
 # Comparison of BLESS-VI vs BB-BLESS
 pdf("scatterplot_mean_BB_BLESS_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_BLESS_sample, 2, mean)[-idx], mean_bb_bless[-idx],c('BLESS-VI','BB-BLESS'), paste0('Mean: Beta', beta_idx))
+scatter_plot_comparison(apply(result_BLESS_sample, 2, mean)[-idx], mean_bb_bless[-idx], c('BLESS-VI', 'BB-BLESS'), paste0('Mean: Beta', beta_idx))
 dev.off()
 
 # Standard deviation
 
 # Comparison of Gibbs vs BB-BLESS
 pdf("scatterplot_sd_Gibbs_BB_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain,2,sd)[-idx], sd_bb_bless[-idx],c('Gibbs','BB-BLESS'), paste0('Standard Deviation: Beta', beta_idx))
+scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain, 2, sd)[-idx], sd_bb_bless[-idx], c('Gibbs', 'BB-BLESS'), paste0('Standard Deviation: Beta', beta_idx))
 dev.off()
 # Comparison of Gibbs vs BLESS-VI
 pdf("scatterplot_sd_Gibbs_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain,2,sd)[-idx], apply(result_BLESS_sample, 2, sd)[-idx],c('Gibbs','BLESS-VI'), paste0('Standard Deviation: Beta', beta_idx))
+scatter_plot_comparison(apply(result_Gibbs_Probit$beta_chain, 2, sd)[-idx], apply(result_BLESS_sample, 2, sd)[-idx], c('Gibbs', 'BLESS-VI'), paste0('Standard Deviation: Beta', beta_idx))
 dev.off()
 # Comparison of BLESS-VI vs BB-BLESS
 pdf("scatterplot_sd_BB_BLESS_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(apply(result_BLESS_sample, 2, sd)[-idx], sd_bb_bless[-idx],c('BLESS-VI','BB-BLESS'), paste0('Standard Deviation: Beta', beta_idx))
+scatter_plot_comparison(apply(result_BLESS_sample, 2, sd)[-idx], sd_bb_bless[-idx], c('BLESS-VI', 'BB-BLESS'), paste0('Standard Deviation: Beta', beta_idx))
 dev.off()
 
 ### Bias ###
-bias_gibbs = apply(result_Gibbs_Probit$beta_chain,2,mean) - as.vector(truth_image)
+bias_gibbs = apply(result_Gibbs_Probit$beta_chain, 2, mean) - as.vector(truth_image)
 bias_bless_vi = apply(result_BLESS_sample, 2, mean) - as.vector(truth_image)
 bias_bb_bless =  mean_bb_bless - as.vector(truth_image)
 
 pdf("scatterplot_bias_Gibbs_BB_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(bias_gibbs[-idx], bias_bb_bless[-idx],c('Gibbs','BB-BLESS'), paste0('Bias: Beta', beta_idx))
+scatter_plot_comparison(bias_gibbs[-idx], bias_bb_bless[-idx], c('Gibbs', 'BB-BLESS'), paste0('Bias: Beta', beta_idx))
 dev.off()
 pdf("scatterplot_bias_Gibbs_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(bias_gibbs[-idx], bias_bless_vi[-idx],c('Gibbs','BLESS-VI'), paste0('Bias: Beta', beta_idx))
+scatter_plot_comparison(bias_gibbs[-idx], bias_bless_vi[-idx], c('Gibbs', 'BLESS-VI'), paste0('Bias: Beta', beta_idx))
 dev.off()
 pdf("scatterplot_bias_BB_BLESS_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(bias_bless_vi[-idx], bias_bb_bless[-idx],c('BLESS-VI','BB-BLESS'), paste0('Bias: Beta', beta_idx))
+scatter_plot_comparison(bias_bless_vi[-idx], bias_bb_bless[-idx], c('BLESS-VI', 'BB-BLESS'), paste0('Bias: Beta', beta_idx))
 dev.off()
 
 ### MSE ###
-mse_gibbs = apply(result_Gibbs_Probit$beta_chain,2,sd)^2 + bias_gibbs^2
+mse_gibbs = apply(result_Gibbs_Probit$beta_chain, 2, sd)^2 + bias_gibbs^2
 mse_bless_vi = apply(result_BLESS_sample, 2, sd)^2 + bias_bless_vi^2
 mse_bb_bless =  sd_bb_bless^2 + bias_bb_bless^2
 
 pdf("scatterplot_mse_Gibbs_BB_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(mse_gibbs[-idx], mse_bb_bless[-idx],c('Gibbs','BB-BLESS'), paste0('MSE: Beta', beta_idx))
+scatter_plot_comparison(mse_gibbs[-idx], mse_bb_bless[-idx], c('Gibbs', 'BB-BLESS'), paste0('MSE: Beta', beta_idx))
 dev.off()
 pdf("scatterplot_mse_Gibbs_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(mse_gibbs[-idx], mse_bless_vi[-idx],c('Gibbs','BLESS-VI'), paste0('MSE: Beta', beta_idx))
+scatter_plot_comparison(mse_gibbs[-idx], mse_bless_vi[-idx], c('Gibbs', 'BLESS-VI'), paste0('MSE: Beta', beta_idx))
 dev.off()
 pdf("scatterplot_mse_BB_BLESS_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(mse_bless_vi[-idx], mse_bb_bless[-idx],c('BLESS-VI','BB-BLESS'), paste0('MSE: Beta', beta_idx))
+scatter_plot_comparison(mse_bless_vi[-idx], mse_bb_bless[-idx], c('BLESS-VI', 'BB-BLESS'), paste0('MSE: Beta', beta_idx))
 dev.off()
 
 ### Probability of Inclusion ###
@@ -544,56 +544,56 @@ effect_truth_image[1:dimension, (dimension/2+1):(dimension)] = 1
 
 
 ### Test statistic: t = beta / sd(beta) ###
-t_gibbs = apply(result_Gibbs_Probit$beta_chain,2,mean) / apply(result_Gibbs_Probit$beta_chain,2,sd)
+t_gibbs = apply(result_Gibbs_Probit$beta_chain, 2, mean) / apply(result_Gibbs_Probit$beta_chain, 2, sd)
 t_bless_vi = apply(result_BLESS_sample, 2, mean) / apply(result_BLESS_sample, 2, sd)
 t_bb_bless = mean_bb_bless / sd_bb_bless
 
 # Comparison of Gibbs vs BB-BLESS
 pdf("scatterplot_test_stat_Gibbs_BB_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(t_gibbs[-idx], t_bb_bless[-idx],c('Gibbs','BB-BLESS'), paste0('Test Statistic: Beta', beta_idx))
+scatter_plot_comparison(t_gibbs[-idx], t_bb_bless[-idx], c('Gibbs', 'BB-BLESS'), paste0('Test Statistic: Beta', beta_idx))
 dev.off()
 # Comparison of Gibbs vs BLESS-VI
 pdf("scatterplot_test_stat_Gibbs_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(t_gibbs[-idx], t_bless_vi[-idx],c('Gibbs','BLESS-VI'), paste0('Test Statistic: Beta', beta_idx))
+scatter_plot_comparison(t_gibbs[-idx], t_bless_vi[-idx], c('Gibbs', 'BLESS-VI'), paste0('Test Statistic: Beta', beta_idx))
 dev.off()
 # Comparison of BLESS-VI vs BB-BLESS
 pdf("scatterplot_test_stat_BB_BLESS_BLESS.pdf", width = 10, height = 10) 
-scatter_plot_comparison(t_bless_vi[-idx], t_bb_bless[-idx],c('BLESS-VI','BB-BLESS'), paste0('Test Statistic: Beta', beta_idx))
+scatter_plot_comparison(t_bless_vi[-idx], t_bb_bless[-idx], c('BLESS-VI', 'BB-BLESS'), paste0('Test Statistic: Beta', beta_idx))
 dev.off()
 
 ### Test statistic:Binary results ### 
  
 t_gibbs_binary = t_gibbs
-t_gibbs_binary[abs(t_gibbs)>1.96] = 1
+t_gibbs_binary[abs(t_gibbs) > 1.96] = 1
 t_gibbs_binary[t_gibbs_binary != 1] = 0
 t_bless_vi = t_bless_vi_binary = result_BLESS$expected_gamma[1,]
 t_bless_vi_binary[t_bless_vi > 0.5] = 1
 t_bless_vi_binary[t_bless_vi <= 0.5] = 0
 t_bb_bless_binary = t_bb_bless
-t_bb_bless_binary[abs(t_bb_bless)>1.96] = 1
+t_bb_bless_binary[abs(t_bb_bless) > 1.96] = 1
 t_bb_bless_binary[t_bb_bless_binary != 1] = 0
 
 # Comparison of Gibbs vs BB-BLESS
 pdf("gibbs_binary_significance_map.pdf", width = 10, height = 10) 
-plot_binary_image(matrix(t_gibbs_binary,50,50))
+plot_binary_image(matrix(t_gibbs_binary, 50, 50))
 dev.off()
 # Comparison of Gibbs vs BLESS-VI
 pdf("bless_vi_binary_significance_map.pdf", width = 10, height = 10) 
-plot_binary_image(matrix(t_bless_vi_binary,50,50))
+plot_binary_image(matrix(t_bless_vi_binary, 50, 50))
 dev.off()
 # Comparison of BLESS-VI vs BB-BLESS
 pdf("bless_bb_binary_significance_map.pdf", width = 10, height = 10) 
-plot_binary_image(matrix(t_bb_bless_binary,50,50))
+plot_binary_image(matrix(t_bb_bless_binary, 50, 50))
 dev.off()
 
 ### Standard Deviation ###
-params1 = apply(result_Gibbs_Probit$beta_chain,2,sd)[-idx]
+params1 = apply(result_Gibbs_Probit$beta_chain, 2, sd)[-idx]
 params2 = sd_bb_bless[-idx]
 
 pdf(paste0(path_plots, 'sd_bb_vs_gibbs.pdf'), width = 10, height = 10)
-plot(params1[abs(t_bb_bless[-idx])>1.96], params2[abs(t_bb_bless[-idx])>1.96], col = 'red', xlim=c(0.0,0.5), ylim=c(0.0,0.5), xlab='Gibbs', ylab='BB-BLESS', main='Standard Deviation: Beta1')
-points(params1[abs(t_bb_bless[-idx])<1.96], params2[abs(t_bb_bless[-idx])<1.96], col = 'blue')
-abline(0,1)
+plot(params1[abs(t_bb_bless[-idx]) > 1.96], params2[abs(t_bb_bless[-idx]) > 1.96], col = 'red', xlim = c(0.0, 0.5), ylim = c(0.0, 0.5), xlab = 'Gibbs', ylab = 'BB-BLESS', main = 'Standard Deviation: Beta1')
+points(params1[abs(t_bb_bless[-idx]) < 1.96], params2[abs(t_bb_bless[-idx]) < 1.96], col = 'blue')
+abline(0, 1)
 dev.off()
 
 # Density Estimation
@@ -604,7 +604,7 @@ pz = matrix(NA, 512, M)
 for(j in 1:M){
 voxel_string = paste0("X",j)
 p = ggplot() +
-  geom_density(data=data.frame(result_BLESS_sample_beta1), aes_string(voxel_string))
+  geom_density(data = data.frame(result_BLESS_sample_beta1), aes_string(voxel_string))
 p = ggplot_build(p)
 pz[,j] = p$data[[1]]$y
 
@@ -616,14 +616,14 @@ px[,j] = p$data[[1]]$y
 
 x=result_BB_random$beta_chain[,j]
 idx_outlier = which((abs(x - median(x)) / mad(x)) > 5, arr.ind = T)
-if(length(idx_outlier)>0){
+if(length(idx_outlier) > 0){
 q = ggplot() +
-   geom_density(data=data.frame(result_BB_random$beta_chain[-idx_outlier,]), aes_string(voxel_string))
+   geom_density(data = data.frame(result_BB_random$beta_chain[-idx_outlier,]), aes_string(voxel_string))
 q = ggplot_build(q)
 py[,j] = q$data[[1]]$y
 } else{
   q = ggplot() +
-    geom_density(data=data.frame(result_BB_random$beta_chain), aes_string(voxel_string))
+    geom_density(data = data.frame(result_BB_random$beta_chain), aes_string(voxel_string))
   q = ggplot_build(q)
   py[,j] = q$data[[1]]$y
 }
@@ -646,9 +646,9 @@ for(j in 1:M){
   wasserstein_metric[j] = transport::wasserstein1d(px[,j], py[,j])
 }
 
-pdf(paste0(path_plots, 'wasserstein_gibbs_vs_bb.pdf'), width=10, height=10)
+pdf(paste0(path_plots, 'wasserstein_gibbs_vs_bb.pdf'), width = 10, height = 10)
 print(ggplot(data = data.frame(c(1:2500)[-idx], wasserstein_metric[-idx]), mapping = aes(x = c(1:2500)[-idx], y = wasserstein_metric[-idx])) +
-        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("Wasserstein metric") + labs(color="Count") + theme_light())
+        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("Wasserstein metric") + labs(color = "Count") + theme_light())
 dev.off()
 
 kl_divergence_bb = KL_divergence
@@ -663,7 +663,7 @@ for(j in 1:M){
 
 pdf(paste0(path_plots, 'KLD_gibbs_vs_bless_vi.pdf'), width = 10, height = 10)
 print(ggplot(data = data.frame(c(1:2500)[-idx], KL_divergence[-idx]), mapping = aes(x = c(1:2500)[-idx], y = KL_divergence[-idx])) +
-        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("KL-divergence") + labs(color="Count") + theme_light())
+        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("KL-divergence") + labs(color = "Count") + theme_light())
 dev.off()
 
 # Wasserstein distance
@@ -674,7 +674,7 @@ for(j in 1:M){
 
 pdf(paste0(path_plots, 'wasserstein_gibbs_vs_bless_vi.pdf'), width = 10, height = 10) 
 print(ggplot(data = data.frame(c(1:2500)[-idx], wasserstein_metric[-idx]), mapping = aes(x = c(1:2500)[-idx], y = wasserstein_metric[-idx])) +
-        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("Wasserstein metric") + labs(color="Count") + theme_light())
+        geom_pointdensity(adjust = .1) + xlab("Voxel") + ylab("Wasserstein metric") + labs(color = "Count") + theme_light())
 
 kl_divergence_vi = KL_divergence
 wasserstein_metric_vi = wasserstein_metric
@@ -686,28 +686,28 @@ metric = 'Wasserstein'
   label_column = 'Legend'
   if(metric == 'Wasserstein'){
   pdf(paste0(path_plots, 'wasserstein_histogram_bb_vs_vi.pdf'), width = 10, height = 10)
-  a = data.frame(n=wasserstein_metric_vi, Legend=rep('BLESS-VI', length(wasserstein_metric_vi)))
-b = data.frame(n=wasserstein_metric_bb, Legend=rep('BB-BLESS', length(wasserstein_metric_bb)))
+  a = data.frame(n = wasserstein_metric_vi, Legend = rep('BLESS-VI', length(wasserstein_metric_vi)))
+b = data.frame(n = wasserstein_metric_bb, Legend = rep('BB-BLESS', length(wasserstein_metric_bb)))
   } else{
     pdf(paste0(path_plots, 'kld_bb_vs_vi.pdf'), width = 10, height = 10)
-  a = data.frame(n=kl_divergence_vi, Legend=rep('BLESS-VI', length(kl_divergence_vi)))
-b = data.frame(n=kl_divergence_bb, Legend=rep('BB-BLESS', length(kl_divergence_bb)))
+  a = data.frame(n = kl_divergence_vi, Legend = rep('BLESS-VI', length(kl_divergence_vi)))
+b = data.frame(n = kl_divergence_bb, Legend = rep('BB-BLESS', length(kl_divergence_bb)))
   }
   
 df = do.call('rbind', list(a,b))
 
-  plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
-    geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-    labs(x='Wasserstein distance', y = "Count") +
-    theme(plot.background=element_rect(fill = "white", color=NA),
+  plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
+    geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+    labs(x = 'Wasserstein distance', y = "Count") +
+    theme(plot.background = element_rect(fill = "white", color = NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank(),
           legend.position = c(0.85, 0.87),
-          text=element_text(size=27.5)) +
+          text=element_text(size = 27.5)) +
     ggtitle('Comparison of Gibbs vs BLESS') 
-  plt = plt + guides(fill=guide_legend(title=label_column))
+  plt = plt + guides(fill=guide_legend(title = label_column))
   plt
   dev.off()
 
@@ -716,28 +716,28 @@ metric = 'KL-divergence'
   label_column = 'Legend'
   if(metric == 'Wasserstein'){
   pdf(paste0(path_plots, 'wasserstein_histogram_bb_vs_vi.pdf'), width = 10, height = 10)
-  a = data.frame(n=wasserstein_metric_vi, Legend=rep('BLESS-VI', length(wasserstein_metric_vi)))
-b = data.frame(n=wasserstein_metric_bb, Legend=rep('BB-BLESS', length(wasserstein_metric_bb)))
+  a = data.frame(n = wasserstein_metric_vi, Legend = rep('BLESS-VI', length(wasserstein_metric_vi)))
+b = data.frame(n = wasserstein_metric_bb, Legend = rep('BB-BLESS', length(wasserstein_metric_bb)))
   } else{
     pdf(paste0(path_plots, 'kld_bb_vs_vi.pdf'), width = 10, height = 10)
-  a = data.frame(n=kl_divergence_vi, Legend=rep('BLESS-VI', length(kl_divergence_vi)))
-b = data.frame(n=kl_divergence_bb, Legend=rep('BB-BLESS', length(kl_divergence_bb)))
+  a = data.frame(n = kl_divergence_vi, Legend = rep('BLESS-VI', length(kl_divergence_vi)))
+b = data.frame(n = kl_divergence_bb, Legend = rep('BB-BLESS', length(kl_divergence_bb)))
   }
 
-df = do.call('rbind', list(a,b))
+df = do.call('rbind', list(a, b))
 
-  plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
-    geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
-    labs(x='KL-divergence', y = "Count") +
-    theme(plot.background=element_rect(fill = "white", color=NA),
+  plt = ggplot(df, aes(x = eval(parse(text = feature)), fill = eval(parse(text = label_column)))) +
+    geom_histogram(alpha = 0.5, position = "identity", aes(y = ..density..), color = "black") +
+    labs(x = 'KL-divergence', y = "Count") +
+    theme(plot.background = element_rect(fill = "white", color = NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
           panel.grid.major = element_blank(),
           panel.grid.minor = element_blank(),
           legend.position = c(0.85, 0.87),
-          text=element_text(size=27.5)) +
+          text=element_text(size = 27.5)) +
     ggtitle('Comparison of Gibbs vs BLESS')
-  plt = plt + guides(fill=guide_legend(title=label_column))
+  plt = plt + guides(fill=guide_legend(title = label_column))
   plt
   dev.off()
 
