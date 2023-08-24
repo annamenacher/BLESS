@@ -21,8 +21,8 @@ library(reshape2)
 ### Constants ###
 #################
 
-N_list = c(500,1000,5000)
-lambda_list = c(1,2,3)
+N_list = c(500, 1000, 5000)
+lambda_list = c(1, 2, 3)
 size = 1
 P = 2
 
@@ -73,9 +73,9 @@ quadrant_map = function(n_l, M){
   #   -> M: number of voxels in the total image (4 * number of voxels in a quadrant)
   
   # Set of lesion sizes
-  lesion_size = c(1,3,5)
+  lesion_size = c(1, 3, 5)
   # Lesion location ~ Uniform anywhere within the quadrant.
-  location = floor(runif(n_l, min=1, max = M/4))
+  location = floor(runif(n_l, min = 1, max = M/4))
   # For every lesion location -> determine the size of the lesion (uniform distributed across the set)
   size = sample(lesion_size, n_l, replace = TRUE)
   # Create empty image vector. 
@@ -126,7 +126,7 @@ neighbor_square <- function(image, i, j, size) {
 config_image = function(image, n_l){
   # Configure image and fill in the lesions accrodingly as identified by the 
   # function "neighbor_square()".
-  idx = which(image !=0,arr.ind = T)
+  idx = which(image != 0, arr.ind = T)
   n_l_total = nrow(idx)
   if(n_l_total > 0){
     for(i in 1:n_l_total){
@@ -165,7 +165,7 @@ generate_sample = function(lambda, setting, N, M){
 for(sim in 1:n_sim){
 
 # Create simulated data
-X = matrix(cbind(c(rep(1,N/2),rep(0,N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))),2)), nrow = N, ncol = P)
+X = matrix(cbind(c(rep(1, N/2), rep(0, N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))), 2)), nrow = N, ncol = P)
 
 ########################
 ### Female & Group 1 ###
