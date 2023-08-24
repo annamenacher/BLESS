@@ -50,13 +50,13 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   # Function to calculate sum of adjacent parameter values that are neighbors as 
   # determined by list of neighboring values.
   sum_si_sj_function = function(j){
-    x = matrix(apply(matrix(Beta[,list_ind[[j]]],nrow=P),1,sum),nrow=P)
+    x = matrix(apply(matrix(Beta[,list_ind[[j]]], nrow = P), 1, sum), nrow = P)
     return(x)
   }
   
   # Function to update spatially-varying coefficients.
   Beta_function = function(j){
-    x = matrix(Sigma_Beta[,j],P,P) %*% (t(X) %*% (expected_Z[,j] - beta0[j]) + Sigma_Inv %*% sum_si_sj[,j]) 
+    x = matrix(Sigma_Beta[,j], P, P) %*% (t(X) %*% (expected_Z[,j] - beta0[j]) + Sigma_Inv %*% sum_si_sj[,j]) 
     return(x)
   }
   
@@ -71,9 +71,9 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   adjacency_matrix = function(dim1, dim2, dim3){
     
     if(missing(dim3)){
-      A = data.frame(x=integer(),y=integer())
+      A = data.frame(x = integer(), y = integer())
       ind = 1:(dim1*dim2)
-      conv = as.vector(matrix(1:(dim1*dim2),dim1,dim2, byrow = T))
+      conv = as.vector(matrix(1:(dim1*dim2), dim1, dim2, byrow = T))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -81,31 +81,31 @@ estimate_BSGLMM=function(X, Y, params0, eps){
         left = i - 1
         right = i + 1
         if (up > 0){
-          A = rbind(A,c(i,up))
+          A = rbind(A, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A = rbind(A,c(i,down))
+          A = rbind(A, c(i, down))
         }
         if (left %% dim2 != 0){
-          A = rbind(A,c(i,left))
+          A = rbind(A, c(i, left))
         }
         if (i %% dim2 != 0){
-          A = rbind(A,c(i,right))
+          A = rbind(A, c(i, right))
         }
       }
-      colnames(A) = c('x','y')
+      colnames(A) = c('x', 'y')
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[which(conv==A$x[i],arr.ind = T)]
-        Ay[i] = ind[which(conv==A$y[i],arr.ind = T)]
+        Ax[i] = ind[which(conv == A$x[i], arr.ind = T)]
+        Ay[i] = ind[which(conv == A$y[i], arr.ind = T)]
       }
       A$x = Ax
       A$y = Ay
     } else{
-      A_2D = data.frame(x=integer(),y=integer())
+      A_2D = data.frame(x = integer(), y = integer())
       ind = 1:(dim1*dim2*dim3)
-      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim=c(dim2,dim1,dim3)), perm=c(2,1,3)))
+      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim = c(dim2, dim1, dim3)), perm = c(2, 1, 3)))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -113,20 +113,20 @@ estimate_BSGLMM=function(X, Y, params0, eps){
         left = i - 1
         right = i + 1
         if (up > 0){
-          A_2D = rbind(A_2D,c(i,up))
+          A_2D = rbind(A_2D, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A_2D = rbind(A_2D,c(i,down))
+          A_2D = rbind(A_2D, c(i, down))
         }
         if (left %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,left))
+          A_2D = rbind(A_2D, c(i, left))
         }
         if (i %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,right))
+          A_2D = rbind(A_2D, c(i, right))
         }
       }
-      colnames(A_2D) = c('x','y')
-      A = data.frame(x=integer(),y=integer())
+      colnames(A_2D) = c('x', 'y')
+      A = data.frame(x = integer(), y = integer())
       for (k in 0:(dim3-1)) {
         A = rbind(A, (A_2D + (k*dim1*dim2)))
       }
@@ -134,17 +134,17 @@ estimate_BSGLMM=function(X, Y, params0, eps){
         bottom = i - dim1*dim2
         top = i + dim1*dim2
         if(bottom > 0){
-          A = rbind(A,c(i,bottom))
+          A = rbind(A, c(i, bottom))
         }
         if(top <= (dim1*dim2*dim3)){
-          A = rbind(A,c(i,top))
+          A = rbind(A, c(i, top))
         }
       }
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[conv==A$x[i]]
-        Ay[i] = ind[conv==A$y[i]]
+        Ax[i] = ind[conv == A$x[i]]
+        Ay[i] = ind[conv == A$y[i]]
       }
       A$x = Ax
       A$y = Ay
@@ -153,13 +153,13 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   }
   
   # Indices of adjacency matrix of 2D lattice.
-  A = adjacency_matrix(dim1,dim2)
+  A = adjacency_matrix(dim1, dim2)
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
     
     if(missing(dim3)){
-      if (dim1<3 | dim2<3){ 
+      if (dim1 < 3 | dim2 < 3){ 
         stop("Image dimensions need to be greater than 2!")
       }
       n_sj = matrix(4, nrow = dim1, ncol = dim2)
@@ -167,7 +167,7 @@ estimate_BSGLMM=function(X, Y, params0, eps){
       n_sj[2:(dim1-1),1] = n_sj[2:(dim1-1),dim2] = n_sj[1,2:(dim2-1)] = n_sj[dim1,2:(dim2-1)] = 3
       n_sj = as.vector(n_sj)
     } else{
-      if (dim1<3 | dim2<3 | dim3<3){ 
+      if (dim1 < 3 | dim2 < 3 | dim3 < 3){ 
         stop("Image dimensions need to be greater than 2!")
       }
       n_sj = array(6, c(dim1, dim2, dim3))
@@ -184,7 +184,7 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   }
   
   # Number of neighbors of 2D lattice.
-  n_sj = n_neighbors(dim1,dim2)
+  n_sj = n_neighbors(dim1, dim2)
   
   # Function to acquire indices of upper triangular of adjacency matrix.
   upper_triangular = function(A, M){
@@ -218,7 +218,7 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   counter = 0
   
   # Initialise difference between parameter values to large value.
-  diff=100
+  diff = 100
   # Set parameters & hyperparameters to initial values.
   sigma_beta0 = params0$sigma_beta0
   beta0 = params0$beta0
@@ -226,7 +226,7 @@ estimate_BSGLMM=function(X, Y, params0, eps){
   Sigma_Inv = params0$Sigma_Inv
 
   # Run optimization until convergence is reached.
-  while(diff>eps){
+  while(diff > eps){
     
     # Increase number of iterations by 1.
     counter = counter + 1
@@ -234,23 +234,23 @@ estimate_BSGLMM=function(X, Y, params0, eps){
     Beta_old = Beta
     
     # Calculate expected value of latents. 
-    Eta = (cbind(rep(1,N), X) %*% rbind(beta0, Beta))
-    expected_Z = structure(hutils::if_else(Y == 1, Eta  + (structure(dnorm(-Eta , mean = 0, sd=1),dim=c(N,M)) / (structure(pnorm(Eta, mean = 0, sd=1),dim=c(N,M)))) , Eta - (structure(dnorm(-Eta, mean = 0, sd=1),dim=c(N,M)) / (1 - structure(pnorm(Eta, mean = 0, sd=1),dim=c(N,M)))) ), dim=c(N,M))
+    Eta = (cbind(rep(1, N), X) %*% rbind(beta0, Beta))
+    expected_Z = structure(hutils::if_else(Y == 1, Eta  + (structure(dnorm(-Eta , mean = 0, sd = 1), dim = c(N, M)) / (structure(pnorm(Eta, mean = 0, sd = 1), dim = c(N, M)))) , Eta - (structure(dnorm(-Eta, mean = 0, sd = 1), dim = c(N, M)) / (1 - structure(pnorm(Eta, mean = 0, sd = 1), dim = c(N, M)))) ), dim = c(N, M))
     
     # Calculate sum of neighboring parameter values. 
-    sum_si_sj = apply(matrix(1:M,nrow=M),1,sum_si_sj_function)
+    sum_si_sj = apply(matrix(1:M, nrow = M), 1, sum_si_sj_function)
     
     # Update spatially-varying intercept.
     beta0 = (1/(N + 1/sigma_beta0^2))*(colSums(expected_Z-X%*%Beta))
     
     # Update variance of Beta.
-    Sigma_Beta  = apply(matrix(n_sj,M,1), 1, FUN=Sigma_Beta_function)
+    Sigma_Beta  = apply(matrix(n_sj, M, 1), 1, FUN = Sigma_Beta_function)
     
     # Update spatially-varying coefficients. 
-    Beta=apply(matrix(1:M,nrow=M),1,Beta_function)
+    Beta=apply(matrix(1:M, nrow = M), 1, Beta_function)
     
     # Update smoothing covariance matrix. 
-    term = matrix((Beta[,A$x] - Beta[,A$y]),P)%*%t(matrix((Beta[,A$x] - Beta[,A$y]),P)) 
+    term = matrix((Beta[,A$x] - Beta[,A$y]), P)%*%t(matrix((Beta[,A$x] - Beta[,A$y]), P)) 
     Sigma_Inv = (M - 1) * solve(diag(P) + term)
   
     # Calculate difference between new and old parameters.
@@ -276,7 +276,7 @@ estimate_BSGLMM=function(X, Y, params0, eps){
 ### Simulation Study ###
 ########################
 
-X = matrix(cbind(c(rep(1,N/2),rep(0,N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))),2)), nrow = N, ncol = P)
+X = matrix(cbind(c(rep(1, N/2), rep(0, N/2)), rep(c(rep(0, (N/4)), rep(1, (N/4))), 2)), nrow = N, ncol = P)
 
 Y = data.matrix(read.csv(paste0(path_data, "Y", sim, ".csv"), header = T)[,2:(M+1)])
 
@@ -297,15 +297,15 @@ if(init == 'Firth'){
 
 if(init == 'random'){
 params0 = list()
-params0$beta0 = rnorm(M,0,1)
-params0$Beta = matrix(rnorm(M*P,0,1),P,M)
+params0$beta0 = rnorm(M, 0, 1)
+params0$Beta = matrix(rnorm(M*P, 0, 1), P, M)
 params0$Sigma_Inv = 1*diag(P)
 params0$sigma_beta0 = 10
 
 }
 
 # Parameter estimation
-params = estimate_BSGLMM(X,Y,params0,eps)
+params = estimate_BSGLMM(X, Y, params0, eps)
 
 # Get test statistics t = beta / sd_beta
 t = params$Beta / sqrt(params$Sigma_Beta[c(1,4),])
