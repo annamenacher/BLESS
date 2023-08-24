@@ -46,9 +46,9 @@ path_data = " "
 adjacency_matrix = function(dim1, dim2, dim3){
     
     if(missing(dim3)){
-      A = data.frame(x=integer(),y=integer())
+      A = data.frame(x = integer(),y = integer())
       ind = 1:(dim1*dim2)
-      conv = as.vector(matrix(1:(dim1*dim2),dim1,dim2, byrow = T))
+      conv = as.vector(matrix(1:(dim1*dim2), dim1,dim2, byrow = T))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -56,31 +56,31 @@ adjacency_matrix = function(dim1, dim2, dim3){
         left = i - 1
         right = i + 1
         if (up > 0){
-          A = rbind(A,c(i,up))
+          A = rbind(A, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A = rbind(A,c(i,down))
+          A = rbind(A, c(i, down))
         }
         if (left %% dim2 != 0){
-          A = rbind(A,c(i,left))
+          A = rbind(A, c(i, left))
         }
         if (i %% dim2 != 0){
-          A = rbind(A,c(i,right))
+          A = rbind(A, c(i, right))
         }
       }
-      colnames(A) = c('x','y')
+      colnames(A) = c('x', 'y')
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[which(conv==A$x[i],arr.ind = T)]
-        Ay[i] = ind[which(conv==A$y[i],arr.ind = T)]
+        Ax[i] = ind[which(conv == A$x[i], arr.ind = T)]
+        Ay[i] = ind[which(conv == A$y[i], arr.ind = T)]
       }
       A$x = Ax
       A$y = Ay
     } else{
-      A_2D = data.frame(x=integer(),y=integer())
+      A_2D = data.frame(x = integer(), y = integer())
       ind = 1:(dim1*dim2*dim3)
-      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim=c(dim2,dim1,dim3)), perm=c(2,1,3)))
+      conv = as.vector(aperm(array(1:(dim1*dim2*dim3), dim = c(dim2, dim1, dim3)), perm = c(2, 1, 3)))
       
       for (i in 1:(dim1 * dim2)){
         up = i - dim2
@@ -88,20 +88,20 @@ adjacency_matrix = function(dim1, dim2, dim3){
         left = i - 1
         right = i + 1
         if (up > 0){
-          A_2D = rbind(A_2D,c(i,up))
+          A_2D = rbind(A_2D, c(i, up))
         }
         if (down <= (dim1 * dim2)){
-          A_2D = rbind(A_2D,c(i,down))
+          A_2D = rbind(A_2D, c(i, down))
         }
         if (left %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,left))
+          A_2D = rbind(A_2D, c(i, left))
         }
         if (i %% dim2 != 0){
-          A_2D = rbind(A_2D,c(i,right))
+          A_2D = rbind(A_2D, c(i, right))
         }
       }
-      colnames(A_2D) = c('x','y')
-      A = data.frame(x=integer(),y=integer())
+      colnames(A_2D) = c('x', 'y')
+      A = data.frame(x = integer(), y = integer())
       for (k in 0:(dim3-1)) {
         A = rbind(A, (A_2D + (k*dim1*dim2)))
       }
@@ -109,17 +109,17 @@ adjacency_matrix = function(dim1, dim2, dim3){
         bottom = i - dim1*dim2
         top = i + dim1*dim2
         if(bottom > 0){
-          A = rbind(A,c(i,bottom))
+          A = rbind(A, c(i, bottom))
         }
         if(top <= (dim1*dim2*dim3)){
-          A = rbind(A,c(i,top))
+          A = rbind(A, c(i, top))
         }
       }
       Ax = numeric(length(A$x))
       Ay = numeric(length(A$y))
       for(i in 1:length(A$x)){
-        Ax[i] = ind[conv==A$x[i]]
-        Ay[i] = ind[conv==A$y[i]]
+        Ax[i] = ind[conv == A$x[i]]
+        Ay[i] = ind[conv == A$y[i]]
       }
       A$x = Ax
       A$y = Ay
@@ -131,7 +131,7 @@ adjacency_matrix = function(dim1, dim2, dim3){
 n_neighbors = function(dim1, dim2, dim3){
   
   if(missing(dim3)){
-    if (dim1<3 | dim2<3){ 
+    if (dim1 < 3 | dim2 < 3){ 
       stop("Image dimensions need to be greater than 2!")
     }
     n_sj = matrix(4, nrow = dim1, ncol = dim2)
@@ -139,7 +139,7 @@ n_neighbors = function(dim1, dim2, dim3){
     n_sj[2:(dim1-1),1] = n_sj[2:(dim1-1),dim2] = n_sj[1,2:(dim2-1)] = n_sj[dim1,2:(dim2-1)] = 3
     n_sj = as.vector(n_sj)
   } else{
-    if (dim1<3 | dim2<3 | dim3<3){ 
+    if (dim1 < 3 | dim2 < 3 | dim3 < 3){ 
       stop("Image dimensions need to be greater than 2!")
     }
     n_sj = array(6, c(dim1, dim2, dim3))
@@ -183,10 +183,10 @@ swap <- function(vec, from, to) {
 ################
 
 # Indices of adjacency matrix of 3D lattice.
-A = adjacency_matrix(dim1,dim2,dim3)
+A = adjacency_matrix(dim1, dim2, dim3)
 
 # Number of neighbors of 3D lattice.
-n_sj = n_neighbors(dim1,dim2,dim3)
+n_sj = n_neighbors(dim1, dim2, dim3)
 
 # Get indices of upper triangular of "adjacency matrix" for 3D lattice. 
 A = upper_triangular(A, dim1*dim2*dim3)
@@ -230,8 +230,8 @@ colnames(A) = c('x', 'y')
 # with values 1:M where M is the number of total number of voxels within the mask. 
 x = swap(A$x, id_mask, 1:M)
 y = swap(A$y, id_mask, 1:M)
-A = data.frame(cbind(x,y))
-colnames(A) = c('x','y')
+A = data.frame(cbind(x, y))
+colnames(A) = c('x', 'y')
 
 # Make a list with every voxel location (vector: 1 to M) and its neighbor indices 
 # (for example: voxel 1 in a 5x5 image will have neighbors at voxels 2 & 6, 
@@ -245,6 +245,6 @@ for(j in 1:M){
 
 # Save masked versions of adjacency indices matrix "A", vector with number of adjacent neighbors "n_sj" and 
 # list of adjacent indices "list_ind".
-save(list_ind,file = paste0(path_data, 'list_ind_mask.RData'))
+save(list_ind, file = paste0(path_data, 'list_ind_mask.RData'))
 write.csv(n_sj, paste0(path_data, "n_sj_mask.csv"))
 write.csv(A, paste0(path_data, "A_mask.csv"))
