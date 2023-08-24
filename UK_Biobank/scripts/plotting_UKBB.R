@@ -109,7 +109,7 @@ zscores_plot = function(slice, cols, cols_mask,
 # set palettes (red - blue color scale)
 cols = rev(brewer.pal(n = 11, name = "RdBu"))
 cols_mask = colorRampPalette(c("black", "white"))(40)
-# color scale: virdis 
+# color scale: virdis (used for creating empirical lesion rate images)
 #library(viridisLite)
 #cols <- viridis(100)
 
