@@ -78,27 +78,26 @@ zscores_plot = function(slice, cols, cols_mask,
   empir_prob = empir_prob@.Data
   empir_prob = as.numeric(unlist(empir_prob))
   empir_prob = array(empir_prob, dim = c(dimension1, dimension2, dimension3))
-  # 
+  
   z_score = img
-  z_score[empir_prob<=empir_threshold] = NA
-  z_score[which(mask!=1)] = NA
+  z_score[empir_prob <= empir_threshold] = NA
+  z_score[which(mask != 1)] = NA
   
   
-  z_score[which(z_score>max)] = max
-  z_score[which(z_score<min)] = min
+  z_score[which(z_score > max)] = max
+  z_score[which(z_score < min)] = min
   
-  my.at = c(seq(min, max, length=length(cols)-1))
-  my.key = list(at=my.at, col=cols, labels=list(cex=2, font=2))
+  my.at = c(seq(min, max, length = length(cols)-1))
+  my.key = list(at = my.at, col = cols, labels = list(cex = 2, font = 2))
   
-  #, scales=list(draw=F), colorkey = my.key
   pdf(paste0(name, slice, '.pdf'))
   if(legend) {
     
-    print(levelplot(mni152[,,slice], xlab="", ylab="", col.regions=cols_mask, scales=list(draw=F), colorkey = my.key, cuts=(length(cols_mask)-1), at=c(seq(min(mni152), max(mni152), length=length(cols_mask)-1)), main="", cex.main=2, useRaster=T) + 
-            levelplot(z_score[,,slice], xlab="", ylab="", region=T, col.regions=cols, scales=list(draw=F), cuts=(length(cols)-1),at=c(seq(min, max, length=length(cols)-1)), useRaster=T)+layer(grid.text(plottitle, x=unit(0.03, "npc"), y=unit(0.98, "npc"), just=c("left", "top"), gp=gpar(fontsize=35, col="white"))))  
+    print(levelplot(mni152[,,slice], xlab = "", ylab = "", col.regions = cols_mask, scales = list(draw = F), colorkey = my.key, cuts = (length(cols_mask)-1), at = c(seq(min(mni152), max(mni152), length = length(cols_mask)-1)), main = "", cex.main = 2, useRaster = T) + 
+            levelplot(z_score[,,slice], xlab = "", ylab = "", region = T, col.regions = cols, scales = list(draw = F), cuts = (length(cols)-1), at = c(seq(min, max, length = length(cols)-1)), useRaster = T)+layer(grid.text(plottitle, x = unit(0.03, "npc"), y = unit(0.98, "npc"), just = c("left", "top"), gp = gpar(fontsize = 35, col = "white"))))  
   } else {
     
-    print(levelplot(mni152[,,slice], xlab="", ylab="", col.regions=cols_mask, scales=list(draw=F), cuts=length(cols_mask)-1, at=c(seq(min(mni152), max(mni152), length=length(cols_mask)-1)), colorkey = legend, main="", cex.main=2, useRaster=T) + levelplot(z_score[,,slice], xlab="", ylab="", col.regions=cols, cuts=length(cols)-1, scales=list(draw=F),at=c(seq(min, max, length=length(cols)-1)), useRaster=T) + layer(grid.text(plottitle, x=unit(0.03, "npc"), y=unit(0.95, "npc"), just=c("left", "top"), gp=gpar(fontsize=35, col="white"))))  
+    print(levelplot(mni152[,,slice], xlab = "", ylab = "", col.regions = cols_mask, scales = list(draw = F), cuts = length(cols_mask)-1, at = c(seq(min(mni152), max(mni152), length = length(cols_mask)-1)), colorkey = legend, main = "", cex.main = 2, useRaster = T) + levelplot(z_score[,,slice], xlab = "", ylab = "", col.regions = cols, cuts = length(cols)-1, scales = list(draw = F), at = c(seq(min, max, length = length(cols)-1)), useRaster = T) + layer(grid.text(plottitle, x = unit(0.03, "npc"), y = unit(0.95, "npc"), just = c("left", "top"), gp = gpar(fontsize = 35, col = "white"))))  
   }
   dev.off()
 }
@@ -133,12 +132,12 @@ beta[ind1] = as.numeric(unlist(params$Beta[1,]))
 beta_age = array(t, c(dimension1, dimension2, dimension3))
 beta_age = as.nifti(beta_age)
 beta_age = as.vector(beta_age@.Data)
-beta_age[beta_age ==0] = NA
+beta_age[beta_age == 0] = NA
 beta_age = as.nifti(array(beta_age, c(dim1,dim2,dim3)))
 
 plottitle="BLESS" 
-zscores_plot(slice=45, cols=cols, cols_mask = cols_mask, mni152 = mni152, img = beta_age, mask=brain_mask, 
-             empir_prob=empir_prob, empir_threshold=0, name=file_name_beta, legend=T, min=-1, max=1)
+zscores_plot(slice = 45, cols = cols, cols_mask = cols_mask, mni152 = mni152, img = beta_age, mask = brain_mask, 
+             empir_prob = empir_prob, empir_threshold = 0, name = file_name_beta, legend = T, min = -1, max = 1)
 
 t = rep(NA, dimension1*dimension2*dimension3)
 t[ind1] = as.numeric(unlist(params$expected_gamma[1,]))
@@ -146,14 +145,14 @@ t[ind1] = as.numeric(unlist(params$expected_gamma[1,]))
 t_age = array(t, c(dimension1, dimension2, dimension3))
 t_age = as.nifti(t_age)
 t_age = as.vector(t_age@.Data)
-t_age[t_age ==0] =NA
+t_age[t_age == 0] = NA
 t_age = as.nifti(array(t_age, c(dim1,dim2,dim3)))
 t_age[t_age > 0.5] = 1
 t_age[t_age <= 0.5] = 0
 
-plottitle="BLESS" 
-zscores_plot(slice=45, cols=cols, cols_mask = cols_mask, mni152 = mni152, img = t_age, mask=brain_mask, 
-             empir_prob=empir_prob, empir_threshold=0, name=file_name_t, legend=T, min=0, max=1)
+plottitle = "BLESS" 
+zscores_plot(slice = 45, cols = cols, cols_mask = cols_mask, mni152 = mni152, img = t_age, mask = brain_mask, 
+             empir_prob = empir_prob, empir_threshold = 0, name = file_name_t, legend = T, min = 0, max = 1)
 }
 
 # Plot slice 45 for Firth regression (parameter map & binary significance map).
@@ -178,19 +177,19 @@ beta[ind1] = as.numeric(unlist(params$Beta[1,]))
 beta_age = array(t, c(dimension1, dimension2, dimension3))
 beta_age = as.nifti(beta_age)
 beta_age = as.vector(beta_age@.Data)
-beta_age[beta_age ==0] = NA
-beta_age = as.nifti(array(beta_age, c(dim1,dim2,dim3)))
+beta_age[beta_age == 0] = NA
+beta_age = as.nifti(array(beta_age, c(dim1, dim2, dim3)))
 
-plottitle="Firth" 
-zscores_plot(slice=45, cols=cols, cols_mask = cols_mask, mni152 = mni152, img = beta_age, mask=brain_mask, 
-             empir_prob=empir_prob, empir_threshold=0, name=file_name_beta, legend=T, min=-1, max=1)
+plottitle = "Firth" 
+zscores_plot(slice = 45, cols = cols, cols_mask = cols_mask, mni152 = mni152, img = beta_age, mask = brain_mask, 
+             empir_prob = empir_prob, empir_threshold = 0, name = file_name_beta, legend = T, min = -1, max = 1)
 
 # FDR control
 t = params$t
-p = 2*pnorm(q=-abs(t))
-t = p.adjust(p, method='fdr')
-t[t<=0.05] = 1
-t[t!=1] = 0
+p = 2*pnorm(q = -abs(t))
+t = p.adjust(p, method = 'fdr')
+t[t <= 0.05] = 1
+t[t != 1] = 0
 
 t = rep(NA, dimension1*dimension2*dimension3)
 t[ind1] = as.numeric(unlist(t))
@@ -198,12 +197,12 @@ t[ind1] = as.numeric(unlist(t))
 t_age = array(t, c(dimension1, dimension2, dimension3))
 t_age = as.nifti(t_age)
 t_age = as.vector(t_age@.Data)
-t_age[t_age ==0] =NA
-t_age = as.nifti(array(t_age, c(dim1,dim2,dim3)))
+t_age[t_age == 0] = NA
+t_age = as.nifti(array(t_age, c(dim1, dim2, dim3)))
 
-plottitle="Firth" 
-zscores_plot(slice=45, cols=cols, cols_mask = cols_mask, mni152 = mni152, img = t_age, mask=brain_mask, 
-             empir_prob=empir_prob, empir_threshold=0, name=file_name_t, legend=T, min=0, max=1)
+plottitle = "Firth" 
+zscores_plot(slice = 45, cols = cols, cols_mask = cols_mask, mni152 = mni152, img = t_age, mask = brain_mask, 
+             empir_prob = empir_prob, empir_threshold = 0, name = file_name_t, legend = T, min = 0, max = 1)
 
 ########################################
 ### Scatterplot: Parameter Estimates ###
@@ -227,31 +226,25 @@ scatter_plot_comparison = function(params1, params2, model_names, title){
   x_min = y_min = min(c(min(params1), min(params2)))
   x_max = y_max = max(c(max(params1), max(params2)))
   
-  ggplot(df, aes(x= params1, y=params2)) +
-    #geom_point(shape=20,) + 
-    geom_pointdensity(adjust = .1,show.legend = F) +
-    #theme(plot.background=element_rect(fill = "#f7fafb", color=NA),
-    #      panel.background = element_rect(fill = '#f7fafb'),
-    #      legend.background = element_rect(fill = "#f7fafb", color = NA),
-    #      panel.grid.major = element_blank(), 
-    #      panel.grid.minor = element_blank()) + 
-    theme(plot.background=element_rect(fill = "white", color=NA),
+  ggplot(df, aes(x = params1, y = params2)) +
+    geom_pointdensity(adjust = .1, show.legend = F) +
+    theme(plot.background = element_rect(fill = "white", color = NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
           panel.grid.major = element_blank(), 
           panel.grid.minor = element_blank()) + 
     geom_abline(intercept = 0) + 
-    xlim(-0.55,1.55) + 
-    ylim(-0.55,1.55) +
+    xlim(-0.55, 1.55) + 
+    ylim(-0.55, 1.55) +
     xlab(params1_name) + 
     ylab(params2_name) +
     theme(text = element_text(size = 35)) +
-    ggtitle(title)+ guides(fill=guide_legend(title=""))
+    ggtitle(title)+ guides(fill = guide_legend(title = ""))
   
 }
 
 M = length(ind1)
-P=4
+P = 4
 
 t_Firth = read.csv(paste0(path_results_firth, "Beta.csv"), header = T)[,2:(M+1)]
 t_Firth = as.numeric(unlist(t_Firth))
@@ -264,28 +257,28 @@ beta_age_BLESS = params$Beta[1,]
 slice = 45
 name = 'FirthvsBLESS'
 pdf(paste0(path_output, name, '.pdf'))
-scatter_plot_comparison(beta_age_Firth, beta_age_BLESS, c("Firth","BLESS"), "")
+scatter_plot_comparison(beta_age_Firth, beta_age_BLESS, c("Firth", "BLESS"), "")
 dev.off()
 
 #####################
 ### Marginal Plot ###
 #####################
 
-marginal_plot = function(marginal,v0){
+marginal_plot = function(marginal, v0){
   df = cbind(marginal, v0)
   df = data.frame(df)
   colnames(df) = c('marginal', 'v0')
   
-  ggplot(df, aes(x= v0, y=marginal)) +
+  ggplot(df, aes(x = v0, y = marginal)) +
     geom_line()+
-    geom_point(aes(x=df$v0[which.max(df$marginal)], y=df$marginal[which.max(df$marginal)]), colour="red", shape=19, size=5) +
+    geom_point(aes(x = df$v0[which.max(df$marginal)], y = df$marginal[which.max(df$marginal)]), colour = "red", shape = 19, size = 5) +
     geom_point() + 
     theme_classic() +
     xlab('v0') + 
     ylab('marginal') +
     theme(text = element_text(size = 35),
           axis.text.y = element_blank(),
-          plot.background=element_rect(fill = "#f7fafb", color=NA),
+          plot.background=element_rect(fill = "#f7fafb", color = NA),
           panel.background = element_rect(fill = '#f7fafb'),
           legend.background = element_rect(fill = "#f7fafb", color = NA)) 
 }
@@ -306,15 +299,15 @@ marginal_plot(marginal, log(v0_list))
 regularisation_plot = function(result, voxels = 'some', border = F, truth = F, effect = 1){
   if(voxels == 'some'){
     p = 10
-    idx = c(342,532,673,987,1109,2341,1745,1867,2034,1981)
+    idx = c(342, 532, 673, 987, 1109, 2341, 1745, 1867, 2034, 1981)
   }
   if(voxels == 'all'){
     if(border == T){
       p = 2146
       idx = 1:2146
     }
-    if(border==F){
-      idx_border = c(1:100,2401:2500,1151:1350,seq(1,2451,50),seq(2,2452,50),seq(49,2499,50),seq(50,2500,50),seq(24,2474,50),seq(25,2475,50),seq(26,2476,50),seq(27,2477,50))
+    if(border == F){
+      idx_border = c(1:100, 2401:2500, 1151:1350, seq(1,2451,50), seq(2,2452,50), seq(49,2499,50), seq(50,2500,50), seq(24,2474,50), seq(25,2475,50), seq(26,2476,50), seq(27,2477,50))
       idx = c(1:2500)[-idx_border]
       p = length(idx)
     }
@@ -326,8 +319,8 @@ regularisation_plot = function(result, voxels = 'some', border = F, truth = F, e
   
   if(truth == F){
     t = matrix(as.matrix(gamma_list), nrow = length(v0_list), ncol = p)
-    t[t>0.5] = 1
-    t[t<=0.5] = 0
+    t[t > 0.5] = 1
+    t[t <= 0.5] = 0
   }
   if(truth == T){
     if(effect == 1){
@@ -338,24 +331,24 @@ regularisation_plot = function(result, voxels = 'some', border = F, truth = F, e
     }
     
     if(effect == 2){
-      t_eff = matrix(0,50,50)
+      t_eff = matrix(0, 50, 50)
       t_eff[26:50,1:25] = 1
       t = matrix(rep(t_eff,length(v0_list)), length(v0_list), p, byrow = T)
     }
   }
   
-  plot(0,0,xlim = c((min(v0_list)),max(v0_list)), ylim = c((min(beta_list, na.rm = T) - 0.1), (max(beta_list, na.rm=T) + 0.1)), xlab =  TeX('$log(\\nu_0)$'), ylab = TeX('$\\beta$'), type = "n", cex.axis=1.15, cex.lab=1.15, , bty = "l")
+  plot(0, 0, xlim = c((min(v0_list)), max(v0_list)), ylim = c((min(beta_list, na.rm = T) - 0.1), (max(beta_list, na.rm = T) + 0.1)), xlab =  TeX('$log(\\nu_0)$'), ylab = TeX('$\\beta$'), type = "n", cex.axis = 1.15, cex.lab = 1.15, , bty = "l")
   for (j in 1:p){
-    lines(v0_list,beta_list[,j], col=alpha(rgb(0.5,0.5,0.5),0.1))
+    lines(v0_list, beta_list[,j], col = alpha(rgb(0.5, 0.5, 0.5), 0.1))
     for(i in 1:length(v0_list)){
       tryCatch({
         if(t[i,j] == 1){
-          points(v0_list[i],beta_list[i,j], col= 'red', pch=20)
+          points(v0_list[i], beta_list[i,j], col = 'red', pch = 20)
         }
         if(t[i,j] == 0){
-          points(v0_list[i],beta_list[i,j], col='blue', pch=20)
+          points(v0_list[i], beta_list[i,j], col = 'blue', pch = 20)
         }
-      }, error=function(e){cat("ERROR :",conditionMessage(e), "\n")})    
+      }, error=function(e){cat("ERROR :", conditionMessage(e), "\n")})    
     }
   }
   
@@ -373,10 +366,10 @@ x = rep(NA, dimension1*dimension2*dimension3)
 x[ind1] = as.numeric(unlist(params$expected_gamma[1,]))
 x = array(x, c(dimension1, dimension2, dimension3))
 x = as.vector(x[,,45])
-x[x>0.5] = 1
-x[x!=1] = 0
-new_ind0 = which(x==0,arr.ind = T)
-new_ind1 = which(x==1,arr.ind = T)
+x[x > 0.5] = 1
+x[x != 1] = 0
+new_ind0 = which(x == 0, arr.ind = T)
+new_ind1 = which(x == 1, arr.ind = T)
 
 result = list()
 result$v0_list = params$v0_list
