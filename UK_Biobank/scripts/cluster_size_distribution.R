@@ -42,7 +42,7 @@ for(b in 1:B){
   cluster_BB[b,] = as.vector(readNIfTI(paste0(path_cluster_BB, 'cluster_size', toString(b), '.nii.gz'))@.Data)[idx_cluster]
 }
 
-cluster_BB_dist = apply(cluster_BB,1,max)
+cluster_BB_dist = apply(cluster_BB, 1, max)
 
 # Cluster Size: posterior mean
 (cluster_BB_mean = mean(cluster_BB_dist))
@@ -58,31 +58,31 @@ write.csv(cluster_BB_dist, paste0(path_cluster_observed, 'cluster_', toString(c_
 
 # Plot cluster size distribution with mean +/- std.
 pdf(paste0(path_cluster_observed, 'cluster_', toString(c_identifier), '/cluster_size_histogram_mean_sd.pdf'))
- p = ggplot(data.frame(cluster_BB_dist), aes(x=cluster_BB_dist)) + 
-  geom_histogram(binwidth = 15, fill="skyblue", color="#e9ecef", alpha=0.9) +
+ p = ggplot(data.frame(cluster_BB_dist), aes(x = cluster_BB_dist)) + 
+  geom_histogram(binwidth = 15, fill = "skyblue", color = "#e9ecef", alpha = 0.9) +
   xlim(cluster_BB_mean - 3*cluster_BB_sd, cluster_BB_mean + 3*cluster_BB_sd) +
   ggtitle("Histogram of Posterior Cluster Size") +
-  theme(panel.background = element_rect(fill='white', colour='black'), plot.title = element_text(size=15)) + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'black'), plot.title = element_text(size = 15)) + 
   xlab("Cluster Size") + 
   ylab("Count") 
- p = p + geom_vline(xintercept=cluster_BB_mean, color = 'blue')
- p = p + geom_vline(xintercept=cluster_BB_mean - cluster_BB_sd, color = 'blue', linetype='dashed')
- p = p + geom_vline(xintercept=cluster_BB_mean + cluster_BB_sd, color = 'blue', linetype='dashed')
+ p = p + geom_vline(xintercept = cluster_BB_mean, color = 'blue')
+ p = p + geom_vline(xintercept = cluster_BB_mean - cluster_BB_sd, color = 'blue', linetype = 'dashed')
+ p = p + geom_vline(xintercept = cluster_BB_mean + cluster_BB_sd, color = 'blue', linetype = 'dashed')
  p
 dev.off()
 
 # Plot cluster size distribution with 95% credible interval.
 cluster_size_value = unique(as.vector(cluster_size_observed@.Data)[idx_cluster])
 pdf(paste0(path_cluster_observed, 'cluster_', toString(c_identifier), '/cluster_size_histogram_credible_interval.pdf'))
-p = ggplot(data.frame(cluster_BB_dist), aes(x=cluster_BB_dist)) + 
-  geom_histogram(binwidth = 15, fill="skyblue", color="#e9ecef", alpha=0.9) +
+p = ggplot(data.frame(cluster_BB_dist), aes(x = cluster_BB_dist)) + 
+  geom_histogram(binwidth = 15, fill = "skyblue", color = "#e9ecef", alpha = 0.9) +
   xlim(cluster_BB_mean - 3*cluster_BB_sd, cluster_BB_mean + 3*cluster_BB_sd) +
   ggtitle("Histogram of Posterior Cluster Size") +
-  theme(panel.background = element_rect(fill='white', colour='black'), plot.title = element_text(size=15)) + 
+  theme(panel.background = element_rect(fill = 'white', colour = 'black'), plot.title = element_text(size = 15)) + 
   xlab("Cluster Size") + 
   ylab("Count") 
-p = p + geom_vline(xintercept=cluster_size_value, color = 'blue')
-p = p + geom_vline(xintercept=quantile(cluster_BB_dist, 0.025), color = 'blue', linetype='dashed')
-p = p + geom_vline(xintercept=quantile(cluster_BB_dist, 0.975), color = 'blue', linetype='dashed')
+p = p + geom_vline(xintercept = cluster_size_value, color = 'blue')
+p = p + geom_vline(xintercept = quantile(cluster_BB_dist, 0.025), color = 'blue', linetype = 'dashed')
+p = p + geom_vline(xintercept = quantile(cluster_BB_dist, 0.975), color = 'blue', linetype = 'dashed')
 p
 dev.off()
