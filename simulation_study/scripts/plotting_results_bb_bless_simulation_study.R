@@ -167,9 +167,6 @@ plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_col
     geom_density(alpha=0)+
     geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
     labs(x='Beta', y = "Density") +
-    #ylim(0,10)+
-    #xlim(-0.1,1.6)+
-    # #f7fafb: poster color
     theme(plot.background=element_rect(fill = "white", color=NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
@@ -214,9 +211,6 @@ plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_col
   geom_density(alpha=0)+
   geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
   labs(x='Beta', y = "Density") +
-  #ylim(0,10)+
-  #xlim(-0.1,1.6)+
-  # #f7fafb: poster color
   theme(plot.background=element_rect(fill = "white", color=NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
@@ -261,9 +255,6 @@ plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_col
   geom_density(alpha=0)+
   geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
   labs(x='Beta', y = "Density") +
-  #ylim(0,10)+
-  #xlim(-0.1,1.6)+
-  # #f7fafb: poster color
   theme(plot.background=element_rect(fill = "white", color=NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
@@ -308,9 +299,6 @@ plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_col
   geom_density(alpha=0)+
   geom_vline(xintercept=means, color = c('#F8766D', '#00BA38', '#619CFF'),linetype="solid", size=1) +
   labs(x='Beta', y = "Density") +
-  #ylim(0,10)+
-  #xlim(-0.1,1.6)+
-  # #f7fafb: poster color
   theme(plot.background=element_rect(fill = "white", color=NA),
         panel.background = element_rect(fill = 'white'),
         legend.background = element_rect(fill = "white", color = NA),
@@ -394,10 +382,6 @@ plot_image_viridis = function(Lesion_prob_matrix, limit_start = 0.0, limit_end =
   
   ggplot(df, aes_string(x = "x", y = "y", fill = "value")) + 
     geom_raster() +                        
-    #scale_fill_gradientn(colours = jet.colors(10),
-    #                     limits = c(limit_start, limit_end),
-    #                     guide = "colourbar",
-    #                     oob = squish) +
     scale_fill_viridis_c(limits = c(limit_start, limit_end), guide = 'colourbar') +
     theme_void() + 
     theme(legend.position = legend.position)
@@ -463,7 +447,7 @@ truth_image = matrix(0, dimension, dimension)
 truth_image[1:(dimension), (dimension/2+1):(dimension)] = (sum(beta1_truth[3:(dimension/2-2),(dimension/2 + 3):(dimension-2)]) + sum(beta1_truth[(dimension/2 + 3):(dimension-2),(dimension/2+3):(dimension-2)])) / (((dimension/2 - 4)^2)*2)
 truth_image[1:(dimension), 1:(dimension/2)] = (sum(beta1_truth[3:(dimension/2-2),3:(dimension/2-2)]) + sum(beta1_truth[(dimension/2 + 3):(dimension-2),3:(dimension/2-2)])) / (((dimension/2 - 4)^2)*2)
 
-# Beta2
+# Beta2 (commented out here but in case the evaluation of beta2 was of interest -> comment out beta1 and use the truth_image defined below)
 #truth_image = matrix(0, dimension, dimension)
 #truth_image[1:(dimension/2), 1:(dimension/2)] = (sum(beta2_truth[3:(dimension/2-2),3:(dimension/2-2)]) + sum(beta2_truth[3:(dimension/2-2),(dimension/2+3):(dimension-2)])+ sum(beta2_truth[(dimension/2 + 3):(dimension/2-2),(dimension/2+3):(dimension-2)])) / (((dimension/2 - 4)^2)*3)
 #truth_image[1:(dimension), (dimension/2+1):(dimension)] = (sum(beta2_truth[3:(dimension/2-2),3:(dimension/2-2)]) + sum(beta2_truth[3:(dimension/2-2),(dimension/2+3):(dimension-2)])+ sum(beta2_truth[(dimension/2 + 3):(dimension/2-2),(dimension/2+3):(dimension-2)])) / (((dimension/2 - 4)^2)*3)
@@ -552,7 +536,7 @@ effect_truth_image = matrix(0, dimension, dimension)
 effect_truth_image[1:(dimension), 1:(dimension/2)] = 0
 effect_truth_image[1:dimension, (dimension/2+1):(dimension)] = 1
 
-# Beta2
+# Beta2 (commented out here but in case the evaluation of beta2 was of interest -> comment out beta1 and use the effect_truth_image defined below)
 #effect_truth_image = matrix(0, dimension, dimension)
 #effect_truth_image[1:(dimension/2), 1:(dimension/2)] = 0
 #effect_truth_image[1:dimension, (dimension/2+1):(dimension)] = 1
@@ -715,9 +699,6 @@ df = do.call('rbind', list(a,b))
   plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
     geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
     labs(x='Wasserstein distance', y = "Count") +
-    #ylim(0,10)+
-    #xlim(0.4,1.4)+
-    # #f7fafb: poster color
     theme(plot.background=element_rect(fill = "white", color=NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
@@ -726,10 +707,7 @@ df = do.call('rbind', list(a,b))
           legend.position = c(0.85, 0.87),
           text=element_text(size=27.5)) +
     ggtitle('Comparison of Gibbs vs BLESS') 
-   # xlab(TeX('$\\beta$')) 
   plt = plt + guides(fill=guide_legend(title=label_column))
-  #plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-  #                 linetype="solid", size=1)
   plt
   dev.off()
 
@@ -751,9 +729,6 @@ df = do.call('rbind', list(a,b))
   plt = ggplot(df, aes(x=eval(parse(text=feature)), fill=eval(parse(text=label_column)))) +
     geom_histogram(alpha=0.5, position="identity", aes(y = ..density..), color="black") +
     labs(x='KL-divergence', y = "Count") +
-    #ylim(0,10)+
-    #xlim(0.4,1.4)+
-    # #f7fafb: poster color
     theme(plot.background=element_rect(fill = "white", color=NA),
           panel.background = element_rect(fill = 'white'),
           legend.background = element_rect(fill = "white", color = NA),
@@ -762,10 +737,7 @@ df = do.call('rbind', list(a,b))
           legend.position = c(0.85, 0.87),
           text=element_text(size=27.5)) +
     ggtitle('Comparison of Gibbs vs BLESS')
-   # xlab(TeX('$\\beta$'))
   plt = plt + guides(fill=guide_legend(title=label_column))
-  #plt + geom_vline(data=data.frame(rbind(c(mean_beta_emvs_bless), c(sd_beta_emvs_bless))),aes(xintercept=truth_voxel),
-  #                 linetype="solid", size=1)
   plt
   dev.off()
 
