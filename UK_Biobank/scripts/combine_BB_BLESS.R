@@ -68,7 +68,7 @@ mask = readNIfTI(paste0(path_mask, 'Emp_map_2mm_mask.nii.gz'))
 img_NA = mask
 img_filler = rep(NA, dim1*dim2*dim3)
 img_filler[ind] = as.numeric(unlist(beta_t))
-img_NA@.Data = array(img_filler, c(dim1,dim2,dim3))
+img_NA@.Data = array(img_filler, c(dim1, dim2, dim3))
 writeNIfTI(img_NA, sprintf('%st_final', path_t))
 rm(img_NA)
 
@@ -81,7 +81,7 @@ for(b in 1:nrow(t)){
   img_NA = mask
   img_filler = rep(NA, dim1*dim2*dim3)
   img_filler[ind] = as.numeric(unlist(t[b,]))
-  img_NA@.Data = array(img_filler, c(dim1,dim2,dim3))
+  img_NA@.Data = array(img_filler, c(dim1, dim2, dim3))
   writeNIfTI(img_NA, sprintf('%s/t_%s', path_t, b))
   rm(img_NA)
 }
