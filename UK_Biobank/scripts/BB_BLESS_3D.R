@@ -295,38 +295,8 @@ estimate_BB_BLESS = function(X, Y, params0, eps){
     # Update xi.
     xi = apply(matrix(1:M, nrow=M), 1, xi_function)
     
-    # too costly to evaluate ! (slows down optimization)
-    # Calculate ELBO. 
-    # expected_Z = 0
-    # log_p_y_z = 0
-    # log_p_z_beta_beta0 = (-0.5)*sum(apply(matrix(1:M,nrow=M),1,function(j) sum(diag(t(X)%*%diag(w,N)%*%X%*%(matrix(var_Beta[,j],P,P) + Beta[,j]%*%t(Beta[,j])))))) - 
-    #   (sum(w)/2)*sum((1/(sum(w) + 1/sigma_beta0^2)) + beta0^2) -
-    #   sum(apply(matrix(1:M,nrow=M),1,function(j) t(Beta[,j])%*%t(diag(w,N)%*%X)%*%matrix(rep(beta0[j],N),N,1)))
-    # log_p_beta_gamma = (-0.5)*sum(expected_gamma*log(v1) + (1-expected_gamma)*log(v0)) - 
-    #   0.5*sum(apply(matrix(1:M,nrow=M),1,function(j) sum(diag(diag(expected_gamma2[,j],P)%*%(matrix(var_Beta[,j],P,P) + Beta[,j]%*%t(Beta[,j])))))) -
-    #   0.5*sum(apply(matrix(1:M,nrow=M),1,function(j) sum(diag(diag(expected_gamma2[,j],P)%*%matrix(mu[,j],P,1)%*%t(matrix(mu[,j],P,1)))))) +
-    #   sum(apply(matrix(1:M,nrow=M),1,function(j) sum(diag(diag(expected_gamma2[,j],P)%*%matrix(mu[,j],P,1)%*%t(Beta[,j])))))
-    # log_p_beta0 = -(M/2)*log(sigma_beta0^2) - sum((1/(2*sigma_beta0^2))*((1/(N + 1/sigma_beta0^2)) + beta0^2))
-    # log_p_gamma_theta = sum(theta*expected_gamma) + sum(log(logistic(xi) + 10^(-10))) - 0.5*sum(theta + xi) - 
-    #   sum(t(apply(matrix(1:P,ncol=P),2,function(i) sum(lambda_xi_func(xi[i,])*(Sigma_theta[term_ind[i,i],] + theta[i,]^2 - xi[i,]^2)))))
-    # log_p_theta_Sigma_Inv = (-0.5)*sum(diag(Sigma_Inv%*%term))
-    # log_p_Sigma_Inv = (-0.5)*sum(diag(diag(P)%*%Sigma_Inv)) - ((P^2)/2)*log(2) - sum(apply(matrix(1:P,nrow=P),1, function(p) gammaln((P+1-p)/2))) - (P/2)*log(P)
-    # Eta = cbind(rep(1,N), X) %*% rbind(beta0, Beta) 
-    # log_q_z = (-0.5)*sum(apply(matrix(1:M,nrow=M),1,function(j) t(Eta[,j]*w)%*%Eta[,j])) - 
-    #   sum(diag(w,N)%*%Y*log(structure(pnorm(Eta, mean = 0, sd=1),dim=dim(Eta)) + 10^(-10)) + diag(w,N)%*%(1-Y)*log(1-structure(pnorm(Eta, mean = 0, sd=1),dim=dim(Eta)) + 10^(-10)))
-    # log_q_beta = (-0.5)*sum(apply(matrix(1:M,nrow=M),1,function(j) log(det(matrix(var_Beta[,j],P,P)) + 10^(-10)))) - (P*M)/2
-    # log_q_beta0 = - (M/2)*log((1/(N + 1/sigma_beta0^2))) -(M/2) 
-    # log_q_gamma = sum(expected_gamma*log(expected_gamma + 10^(-10)) + (1-expected_gamma)*log(1-expected_gamma + 10^(-10)))
-    # log_q_theta = (-0.5)*sum(apply(matrix(1:M,nrow=M),1,function(j) sum(log(det(matrix(Sigma_theta[,j],P,P) + 10^(-10)))))) - (P*M)/2 
-    # log_q_Sigma_Inv = -(M + P)/2 - (((M+P)*P)/2)*log(2) - ((M+P)/2)*log(det(solve(diag(P) + term))) - sum(apply(matrix(1:P,nrow=P),1, function(p) gammaln((M+P+1-p)/2)))
-    # 
-    # Q = log_p_y_z + log_p_z_beta_beta0 + log_p_beta_gamma + log_p_beta0 + log_p_gamma_theta + log_p_theta_Sigma_Inv + log_p_Sigma_Inv -
-    #   log_q_z - log_q_beta - log_q_beta0 - log_q_gamma - log_q_theta - log_q_Sigma_Inv
-    
-    #diff = (Q - Q_old)
     Eta = 0
     diff = max(abs(Beta - Beta_old))
-    #ELBO= append(ELBO, Q)
     
     # Save parameter values every 100 iterations of optimization. 
     if(counter %% 100){
