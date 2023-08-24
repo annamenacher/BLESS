@@ -5,8 +5,8 @@
 #$ -t 1:1000              # number of bootstrap samples
 
 ### request maximum of 24 hours of compute time
-#$ -l h_rt=30:00:00
-#$ -l s_rt=30:00:00
+#$ -l h_rt = 30:00:00
+#$ -l s_rt = 30:00:00
 #
 ### -cwd means work in the directory where submitted
 #$ -cwd 
@@ -40,10 +40,10 @@ module load fsl  # load FSLeyes software
 # Cluster defining threshold of 2.3
 
 # Option 1: Run to acquire cluster size output for every bootstrap sample (set -t 1:1000 because there are B = 1000 bootstrap samples)
-cluster -i <path_t>t_${SGE_TASK_ID}.nii.gz -t 2.3 -o <path_c>oindex/cluster_index${SGE_TASK_ID} --osize=<path_c_osize>cluster_size${SGE_TASK_ID} > <path_c_txt>cluster_info${SGE_TASK_ID}.txt
+cluster -i <path_t>t_${SGE_TASK_ID}.nii.gz -t 2.3 -o <path_c>oindex/cluster_index${SGE_TASK_ID} --osize = <path_c_osize>cluster_size${SGE_TASK_ID} > <path_c_txt>cluster_info${SGE_TASK_ID}.txt
 
 # Option 2: Run to acquire cluster size determined by posterior mean / posterior standard deviation from concatenated bootstrap replicates (set -t 1).
-cluster -i <path_t>t_final.nii.gz -t 2.3 -o <path_c_final>cluster_index.nii.gz --osize=<path_c_final>cluster_size.nii.gz > <path_c_final>cluster_info.txt
+cluster -i <path_t>t_final.nii.gz -t 2.3 -o <path_c_final>cluster_index.nii.gz --osize = <path_c_final>cluster_size.nii.gz > <path_c_final>cluster_info.txt
 
 echo "*********************************"
 echo "finished at: `date`"
