@@ -43,7 +43,7 @@ Simualtion study:
   
 UK Biobank:
 - **A.R** : Create list of neighboring indices for every voxel in a masked 3D lattice. 
-- firth_regression.R: Performs parameter estimation and inference for indepdent mass-univariate Firth regression models at each voxel location. 
+- **firth_regression.R** : Performs parameter estimation and inference for indepdent mass-univariate Firth regression models at each voxel location. 
 - **BLESS_3D.R** : Performs parameter estimation and inference via BLESS-VI (= Bayesian Lesion Estimation via Structured Spike-and-slab Prior), specifically deploys dynamic posterior exploration.
 - **BB_BLESS_3D.R** : Performs parameter estimation and inference via BB-BLESS (= Bayesian Bootstrap - BLESS) with output from DPE from BLESS.R as initialization.
 - **combine_BB_BLESS.R** : Combine the bootstrap samples from BB-BLESS (which were executed in parallel) for further analysis and calculation of cluster size distributions.
