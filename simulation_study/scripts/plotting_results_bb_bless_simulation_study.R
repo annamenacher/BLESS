@@ -407,6 +407,12 @@ plot_image_viridis = function(Lesion_prob_matrix, limit_start = 0.0, limit_end =
  
 # Plot scatterplot comparing two sets of values params1 vs params2.
 scatter_plot_comparison = function(params1, params2, model_names, title){
+ 
+  # Inputs:
+  # - params1: vector with parameter estimates of model 1 (on x-axis)
+  # - params2: vector with parameter estimates of model 2 (on y-axis)
+  # - model_names: vector with names of model, ex. c('BLESS-VI', 'Firth')
+  # - title: plot title
   
   df = cbind2(params1, params2)
   df = df[complete.cases(df),]
@@ -428,28 +434,6 @@ scatter_plot_comparison = function(params1, params2, model_names, title){
     xlab(params1_name) + 
     ylab(params2_name) +
     theme(text = element_text(size = 18)) +
-    ggtitle(title)
-}
-
-# Plot for creating boxplot comparing set of values params1 vs params2 vs params3 vs params4.
-boxplot_comparison = function(params1, params2, params3, params4, model_names, title){
-  
-  model = c(rep(model_names[2], length(c(1:2500)[-idx])), rep(model_names[3], length(c(1:2500)[-idx])), rep(model_names[4], length(c(1:2500)[-idx])))
-  params1 = rep(params1, 3)
-  params2 = c(params2, params3, params4)
-  df = cbind2(params1, params2)
-  df = df[complete.cases(df),]
-  df = data.frame(df)
-  colnames(df) = c('Effect' , 'Beta')
-  df$Effect = round(c(df$Effect), 3)
-  df$Effect = as.factor(df$Effect)
-  df$Model = model
-  
-  ggplot(df,aes(x = Model, y = Beta)) +
-    geom_boxplot(aes(fill = Effect)) +
-    theme_minimal() + 
-    labs(x = 'Model', y = 'Beta') +
-    ylim(-0.25, 1.25) +
     ggtitle(title)
 }
 
