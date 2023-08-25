@@ -71,6 +71,12 @@ logit = function(x){
 
 # Function to estimate BB-BLESS model.
 bb_bless = function(X, Y, params0, eps){
+
+  # Inputs:
+  # - X: vector with parameter estimates of model 1 (on x-axis)
+  # - Y: vector with parameter estimates of model 2 (on y-axis)
+  # - params0: vector with names of model, ex. c('BLESS-VI', 'Firth')
+  # - eps: plot title
   
   # Time function call.
   time.start = Sys.time()
