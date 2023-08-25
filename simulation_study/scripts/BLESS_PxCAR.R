@@ -407,6 +407,12 @@ estimate_BLESS = function(X, Y, params0, eps){
 
 # Function to calculate marginal posterior of gamma. 
 calculate_marginal = function(result, params0, X, y){
+
+  # Inputs:
+  # - result: list containing the output of DPE
+  # - params0: list containing intial parameter values
+  # - X: input data (scalar covariates)
+  # - y: output data (image -> lesion masks)
   
   # Set constants & hyperparameters.
   v0 = params0$v0
