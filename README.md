@@ -75,6 +75,17 @@ The following R packages are necessary to successfully use the codes:
 For cluster size inference: 
 - Software package: FSL (https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FSLeyes)
 
+## Instructions for Use
+
+### Reproducibility
+
+**Code:**
+
+- Simulation study: example case provided for N=1,000 and lambda=3 (all other studies can also be reproduced by generating additional datasets with 'data_generation.R')
+- Files are listed in order of execution for one single dataset. If one desires to replicate the entire simulation study, then execution of scripts for all datasets {1, ... , 100} is required. It is recommended to run Firth regression first as it is needed for initialization for BLESS. More so, BB-BLESS also requires the output from BLESS as initialization. 
+- UK Biobank application: Code to run UK Biobank application with masked lesion data. We concatenate the masked nifti files, containing lesion masks, into a NxM matrix, where N represents sample size and M is the number of voxels in the mask, and save the output as a csv file.
+
+
 **Creation of figures and tables in the main paper and supplementary material:**
 
 Paper:
@@ -102,11 +113,5 @@ Supplementary material:
 - Fig. 16, 17, 18, 19: FSL
 - Tab. 1-25: table_parameter_prediction_inference.R
 
-## Instructions for Use
-
-### Reproducibility
-- Simulation study: example case provided for N=1,000 and lambda=3 (all other studies can also be reproduced by generating additional datasets with 'data_generation.R')
-- Files are listed in order of execution for one single dataset. If one desires to replicate the entire simulation study, then execution of scripts for all datasets {1, ... , 100} is required. It is recommended to run Firth regression first as it is needed for initialization for BLESS. More so, BB-BLESS also requires the output from BLESS as initialization. 
-- UK Biobank application: Code to run UK Biobank application with masked lesion data. We concatenate the masked nifti files, containing lesion masks, into a NxM matrix, where N represents sample size and M is the number of voxels in the mask, and save the output as a csv file. 
 
 ### Replication (Optional)
