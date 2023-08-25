@@ -45,6 +45,11 @@ path_data = " "
 # spatial MCAR prior (a voxel location is considered adjacent if they share the same face).
 adjacency_matrix = function(dim1, dim2, dim3){
     
+    # Inputs:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
+    
     if(missing(dim3)){
       A = data.frame(x = integer(),y = integer())
       ind = 1:(dim1*dim2)
@@ -129,6 +134,11 @@ adjacency_matrix = function(dim1, dim2, dim3){
   
 # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
 n_neighbors = function(dim1, dim2, dim3){
+
+    # Inputs:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
   
   if(missing(dim3)){
     if (dim1 < 3 | dim2 < 3){ 
@@ -157,6 +167,11 @@ n_neighbors = function(dim1, dim2, dim3){
 
 # Function to acquire indices of upper triangular of adjacency matrix.
 upper_triangular = function(A, M){
+
+    # Inputs:
+    # - A: spatial adjacency matrix
+    # - M: number of total voxels
+    
   A = A[order(A$x),]
   UT = data.frame(x = integer(), y = integer())
   K = dim(A)[1]
@@ -173,6 +188,12 @@ upper_triangular = function(A, M){
 # Function to swap indices in a vector (i.e. vec = c(1,2,3) should actually be vec = c(2,5,1)
 # hence: 1 -> 2, 2 -> 5, 3 -> 1).
 swap <- function(vec, from, to) {
+    
+    # Inputs:
+    # - vec: vector to transform
+    # - from: vector mapping (old)
+    # - to: vector mapping (new)
+    
   tmp <- to[ match(vec, from) ]
   tmp[is.na(tmp)] <- vec[is.na(tmp)]
   return(tmp)
