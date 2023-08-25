@@ -53,6 +53,8 @@ UK Biobank:
 - **posterior_predictive_check.R** : Perform posterior predictive checking and plot figures from Section 4.5 of the supplementary material. 
 
 ### Optional Information 
+
+**R libraries:**
 The following R packages are necessary to successfully use the codes:
 
 - deldir
