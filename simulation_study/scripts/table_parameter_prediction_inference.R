@@ -48,6 +48,10 @@ path_results_Gibbs = ''
 #################
 
 plot_binary_image = function(empirical_matrix){
+
+  # Input:
+  # - empirical_matrix: 2D binary image to plot 
+  
   new_x = c()
   for(i in 1:dimension){
     rep_x = rep(i, dimension)
