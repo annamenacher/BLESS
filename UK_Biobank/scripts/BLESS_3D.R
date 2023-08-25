@@ -90,7 +90,13 @@ logit = function(x){
 
 # Function to estimate parameter estimates of BLESS.
 estimate_BLESS = function(X, Y, params0, eps){
-  
+
+  # Inputs:
+  # - X: input data (scalar covariates)
+  # - Y: output data (image -> lesion masks)
+  # - params0: list containing intial parameter values
+  # - eps: optimization threshold = difference between ELBOs which determines when to stop optimization
+
   # Time function call.
   time.start = Sys.time()
   
@@ -296,6 +302,12 @@ estimate_BLESS = function(X, Y, params0, eps){
 
 # Function to calculate marginal posterior of gamma. 
 calculate_marginal = function(result, params0, X, y){
+
+  # Inputs:
+  # - result: list containing the output of DPE
+  # - params0: list containing intial parameter values
+  # - X: input data (scalar covariates)
+  # - y: output data (image -> lesion masks)
   
   # Set constants & hyperparameters.
   v0 = params0$v0
