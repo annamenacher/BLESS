@@ -65,6 +65,12 @@ return(x)
 # Function to estimate parameters in BLESS.
 estimate_BLESS = function(X, Y, params0, eps){
   
+  # Inputs:
+  # - X: input data (scalar covariates)
+  # - Y: output data (image -> lesion masks)
+  # - params0: list containing intial parameter values
+  # - eps: optimization threshold = difference between ELBOs which determines when to stop optimization
+  
   # Time function call.
   time.start = Sys.time()
   
@@ -101,6 +107,11 @@ estimate_BLESS = function(X, Y, params0, eps){
   # Function for deriving indices of adjacent neighbors of every single voxel location for 
   # spatial MCAR prior (a voxel location is considered adjacent if they share the same face).
   adjacency_matrix = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       A = data.frame(x = integer(), y = integer())
@@ -189,6 +200,11 @@ estimate_BLESS = function(X, Y, params0, eps){
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       if (dim1 < 3 | dim2 < 3){ 
@@ -220,6 +236,11 @@ estimate_BLESS = function(X, Y, params0, eps){
   
   # Function to acquire indices of upper triangular of adjacency matrix.
   upper_triangular = function(A, M){
+
+    # Input:
+    # - A: spatial adjacency matrix
+    # - M: total number of voxels
+    
     A = A[order(A$x),]
     UT = data.frame(x = integer(), y = integer())
     K = dim(A)[1]
