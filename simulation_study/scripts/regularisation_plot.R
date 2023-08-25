@@ -36,6 +36,14 @@ result$gamma_list = gamma1_list
 result$beta_list = Beta1_list
 
 regularisation_plot = function(result, voxels = 'some', border = F, truth = F, effect = 1){
+
+  # Inputs:
+  # - result: list of estimated parameter estimates (must contain matrix with dimensions n_DPE x M)
+  # - voxels: only evaluate regularisation plot over 'some' voxels or 'all' voxels
+  # - border: include / exclude border voxels
+  # - truth: use true significant / non-significant values or estimated significant / npn-significant values
+  # - effect: covariate map of interest 1 = 'age', 2 = 'sex', ...
+ 
   if(voxels == 'some'){
     p = 10
     idx = c(342, 532, 673, 987, 1109, 2341, 1745, 1867, 2034, 1981)
