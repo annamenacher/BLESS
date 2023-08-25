@@ -46,6 +46,11 @@ setting_2m = c(1, 1, 1, 4)
 #################
 
 Lesion_Prob_Matrix_Setup = function(Prob_hat, N_scenario){
+    
+    # Input: 
+    # - Prob_hat: empirical lesion rate map
+    # - N_scenario: number of subjects
+  
   Prob_hat = colSums(Prob_hat) / N_scenario
   # Convert to matrix with shape of dimension x dimension for plotting.
   Lesion_prob_matrix = matrix(Prob_hat, ncol = dimension, nrow = dimension)
@@ -162,6 +167,14 @@ generate_sample = function(lambda, setting, N, M){
 }
 
 generate_truth_P2 = function(lambda, setting_1m, setting_2m, setting_1f, setting_2f, M){
+
+    # Input: 
+    # - lambda: average number of lesions in each quadrant
+    # - setting_1m: vector with 4 values to determine effect multiplier for each quadrant for setting (group 1 % male)
+    # - setting_2m: vector with 4 values to determine effect multiplier for each quadrant for setting (group 2 % male)
+    # - setting_1f: vector with 4 values to determine effect multiplier for each quadrant for setting (group 1 % female)
+    # - setting_2f: vector with 4 values to determine effect multiplier for each quadrant for setting (group 2 % female)
+    # - M: total number of voxels 
   
 dimension = sqrt(M)
 result = list()
