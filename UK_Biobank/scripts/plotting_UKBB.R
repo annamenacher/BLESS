@@ -214,6 +214,12 @@ library(ggpointdensity)
 
 # Function to plot a scatterplot between parameter values estimated via Firth regression and BLESS.
 scatter_plot_comparison = function(params1, params2, model_names, title){
+
+  # Inputs:
+  # - params1: vector with parameter estimates of model 1 (on x-axis)
+  # - params2: vector with parameter estimates of model 2 (on y-axis)
+  # - model_names: vector with names of model, ex. c('BLESS-VI', 'Firth')
+  # - title: plot title
   
   df = cbind2(params1, params2)
   df = df[complete.cases(df),]
@@ -265,6 +271,11 @@ dev.off()
 #####################
 
 marginal_plot = function(marginal, v0){
+  
+  # Inputs:
+  # - marginal: vector with marginal posterior of gamma values
+  # - v0: vector with spike variances values over which DPE was evaluated over
+
   df = cbind(marginal, v0)
   df = data.frame(df)
   colnames(df) = c('marginal', 'v0')
@@ -297,6 +308,14 @@ marginal_plot(marginal, log(v0_list))
 # Only plot voxels from slice 45 that are within the mask. Otherwise, the plot becomes too full 
 
 regularisation_plot = function(result, voxels = 'some', border = F, truth = F, effect = 1){
+
+  # Inputs:
+  # - result: list of estimated parameter estimates (must contain matrix with dimensions n_DPE x M)
+  # - voxels: only evaluate regularisation plot over 'some' voxels or 'all' voxels
+  # - border: include / exclude border voxels
+  # - truth: use true significant / non-significant values or estimated significant / npn-significant values
+  # - effect: covariate map of interest 1 = 'age', 2 = 'sex', ...
+  
   if(voxels == 'some'){
     p = 10
     idx = c(342, 532, 673, 987, 1109, 2341, 1745, 1867, 2034, 1981)
