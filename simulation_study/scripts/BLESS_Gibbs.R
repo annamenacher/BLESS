@@ -144,6 +144,15 @@ logit = function(x){
 
 # Function for Gibbs sampler
 gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, params0, n_iter, burn_in){
+
+  # Inputs:
+  # - X: input data (scalar covariates)
+  # - y: output data (image -> lesion masks)
+  # - dim1: dimension1 of 3D MRI scan
+  # - dim2: dimension2 of 3D MRI scan
+  # - params0: list containing intial parameter values
+  # - n_iter: number of MCMC iterations
+  # - burn_in: burn-in iterations
   
   # Logistic function (this specification avoids numerical issues)
   logistic = function(x){
@@ -161,6 +170,11 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   # Function for deriving indices of adjacent neighbors of every single voxel location for 
   # spatial MCAR prior (a voxel location is considered adjacent if they share the same face).
   adjacency_matrix = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       A = data.frame(x = integer(), y = integer())
@@ -249,6 +263,11 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       if (dim1 < 3 | dim2 < 3){ 
@@ -280,6 +299,11 @@ gibbs_sampler_probit_regression_structured_ss = function(X, y, dim1, dim2, param
   
   # Function to acquire indices of upper triangular of adjacency matrix.
   upper_triangular = function(A, M){
+
+    # Input: 
+    # - A: spatial adjacency matrix
+    # - M: total number of voxels
+    
     A = A[order(A$x),]
     UT = data.frame(x = integer(), y = integer())
     K = dim(A)[1]
