@@ -1,7 +1,23 @@
+##############
+### Script ###
+##############
+
+# Script to plot the barplots for evaluating the inference results, such as TPR, TDR, FPR, and FDR, for 
+# simulation study setting that vary in sample size (N=500, N=1,000, N=5,000) and base rate intensities
+# (lambda=1, lambda=2, lambda=3).
+
+#################
+### Libraries ###
+#################
+
 # Libraries
 library(ggplot2)
 library(grid)
 library(latex2exp)
+
+#################
+### Constants ###
+#################
 
 # Define output path.
 path = ''
