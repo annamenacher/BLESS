@@ -152,7 +152,13 @@ logit = function(x){
 
 # Function to estimate parameter estimates with BB-BLESS.
 estimate_BB_BLESS = function(X, Y, params0, eps){
-  
+
+  # Inputs:
+  # - X: input data (scalar covariates)
+  # - Y: output data (image -> lesion masks)
+  # - params0: list containing intial parameter values
+  # - eps: optimization threshold = difference between ELBOs which determines when to stop optimization
+
   # Time function call.
   time.start = Sys.time()
   # Hyperparameters
