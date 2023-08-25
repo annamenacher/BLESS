@@ -72,6 +72,13 @@ plot_binary_image = function(empirical_matrix){
 }
 
 plot_image_rdbu = function(Lesion_prob_matrix, limit_start = 0.0, limit_end = 0.1, legend.position = 'none'){
+
+ # Input: 
+ # - Lesion_prob_matrix: 2D image to plot
+ # - limit_start: lower limit of values to plot
+ # - limit_end: uppper limit of values to plot
+ # - legend.position: legend position
+  
   new_x = c()
   for(i in 1:dimension){
     rep_x = rep(i,dimension)
@@ -98,6 +105,12 @@ plot_image_rdbu = function(Lesion_prob_matrix, limit_start = 0.0, limit_end = 0.
 }
 
 calculate_bias = function(truth, prediction, n_sim = 1, effect_size = 0.5){
+
+ # Input: 
+ # - truth: true values
+ # - prediction: estimated values
+ # - n_sim: number of simulated datasets
+ # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   if(effect_size == 0.5){
     bias = list()
@@ -202,6 +215,12 @@ calculate_bias = function(truth, prediction, n_sim = 1, effect_size = 0.5){
 }
 
 calculate_variance = function(truth, prediction, n_sim = 1, effect_size = 0.5){
+
+ # Input: 
+ # - truth: true values
+ # - prediction: estimated values
+ # - n_sim: number of simulated datasets
+ # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   if(effect_size == 0.5){
     variance = list()
@@ -308,7 +327,12 @@ calculate_variance = function(truth, prediction, n_sim = 1, effect_size = 0.5){
 }
 
 calculate_mse = function(truth, prediction, n_sim = 1, effect_size = 0.5){
-  
+
+ # Input: 
+ # - truth: true values
+ # - prediction: estimated values
+ # - n_sim: number of simulated datasets
+ # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   if(effect_size == 0.5){
     mse = list()
@@ -413,6 +437,12 @@ calculate_mse = function(truth, prediction, n_sim = 1, effect_size = 0.5){
 }
 
 calculate_variance_beta = function(truth, prediction, n_sim = 1, effect_size = 0.5){
+
+ # Input: 
+ # - truth: true values
+ # - prediction: estimated values
+ # - n_sim: number of simulated datasets
+ # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   if(effect_size == 0.5){
     variance = list()
@@ -506,6 +536,13 @@ calculate_variance_beta = function(truth, prediction, n_sim = 1, effect_size = 0
 }
 
 calculate_mse_bias_variance = function(truth, prediction, prediction_sd, n_sim = 1 , effect_size = 0.5, type = 'beta'){
+
+ # Input: 
+ # - truth: true values
+ # - prediction: estimated values
+ # - predition_sd: estimated standard deviation values
+ # - n_sim: number of simulated datasets
+ # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   if(type == 'y'){
     variance = calculate_variance(truth, prediction, n_sim, effect_size)
@@ -534,6 +571,12 @@ calculate_mse_bias_variance = function(truth, prediction, prediction_sd, n_sim =
 
 
 read_in_results_P2 = function(model, X, v0_list = seq(0.005, 0.15, 0.005), idx = 1:100){
+
+ # Input: 
+ # - model: scalar with model name (options: "BLESS_DPE_MCAR", "BLESS_DPE_PxCAR", "BLESS_DPE_CAR", "BSGLMM", ...)
+ # - X: input data (scalar covariates)
+ # - v0_list: vector of spike variances over which DPE was run over
+ # - idx: indices of simulated datasets to include
   
   if(model == "BLESS_DPE_MCAR"){
     
@@ -1224,6 +1267,12 @@ print('Firth fine')
 }
 
 evaluate_bias_mae_mse = function(truth, result, n_sim, quantity = 'all'){
+
+  # Input: 
+  # - truth: true values
+  # - result: estimated values
+  # - n_sim: total number of simulated datasets
+  # - quantity: which model parameter or quantity is being evaluated (ex. "beta0", "beta1", ...)
   
   eval = list()
   
@@ -1272,6 +1321,11 @@ evaluate_bias_mae_mse = function(truth, result, n_sim, quantity = 'all'){
 }
 
 evaluate_TPR_TDR_FPR_FDR = function(result, n_sim, effect_size){
+
+  # Input:
+  # - result: binary significance matrix with dimensions n_sim x M
+  # - n_sim: number of simulated datasets
+  # - effect_size: area of effect size (0.25: 25% of image, 0.5: 50% of image, 0.75: 75% of image, etc)
   
   # TPR = TP / (TP + FN)
   # TDR = TP / (TP + FP) = 1 - FDR
@@ -1361,6 +1415,13 @@ evaluate_TPR_TDR_FPR_FDR = function(result, n_sim, effect_size){
 }
 
 bias_mae_mse_y_total = function(result1, result2, result3, result4){
+
+  # Input:
+  # - result1: predictive results for setting (group 1 & male)
+  # - result1: predictive results for setting (group 2 & male)
+  # - result1: predictive results for setting (group 1 & female)
+  # - result1: predictive results for setting (group 2 & female)
+
   result = list()
   
   result$bias = result1$bias$total + result2$bias$total + result3$bias$total + result4$bias$total
@@ -1489,6 +1550,10 @@ rm(result_Gibbs)
 ### Parameter Estimates ###
 
 DPE_param_table_function = function(n_row = 6, n_col = 3){
+
+  # Input:
+  # - n_row: number of table rows
+  # - n_col: number of table columns
   
   eval_param = matrix(NA, nrow = n_row, ncol = n_col)
   colnames(eval_param) = c('beta0', 'beta1', 'beta2')
@@ -1623,6 +1688,17 @@ DPE_param_table_function = function(n_row = 6, n_col = 3){
 DPE_param_table_function(6,3)
 
 DPE_param_table_function = function(result1, result2, result3, result4, result5, n_row = 5, n_col = 3, y_total = F){
+
+  # Input:
+  # - result1: results of BLESS-Gibbs
+  # - result2: results of BB-BLESS
+  # - result3: results of BLESS-VI
+  # - result4: results of BSGLMM
+  # - result5: results of Firth
+  # - n_row: number of table rows
+  # - n_col: number of table columns
+  # - y_total: T: prediction results evaluation, F: parameter estimation results evaluation
+  
   if(y_total == T){
     eval_param = matrix(NA, nrow = n_row, ncol = n_col)
     colnames(eval_param) = c('Bias', 'Variance', 'MSE')
@@ -1677,7 +1753,16 @@ DPE_param_table_function = function(result1, result2, result3, result4, result5,
 }
 
 DPE_confusion_table_function = function(result1, result2, result3, result4,result5,n_row = 5, n_col = 4){
-  
+
+  # Input:
+  # - result1: results of BLESS-Gibbs
+  # - result2: results of BB-BLESS
+  # - result3: results of BLESS-VI
+  # - result4: results of BSGLMM
+  # - result5: results of Firth
+  # - n_row: number of table rows
+  # - n_col: number of table columns
+
   eval_param = matrix(NA, nrow = n_row, ncol = n_col)
   colnames(eval_param) = c('TPR', 'TDR', 'FPR', 'FDR')
   rownames(eval_param) = c('BLESS-MCMC', 'BB-BLESS', 'BLESS-VI', 'BSGLMM', 'Firth')
