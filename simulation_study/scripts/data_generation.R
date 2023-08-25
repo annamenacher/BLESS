@@ -49,6 +49,11 @@ setting_2m = c(1, 1, 2, 2)
 #################
 
 Lesion_Prob_Matrix_Setup = function(Prob_hat, N_scenario){
+    
+    # Input: 
+    # - Prob_hat: empirical lesion rate map
+    # - N_scenario: number of subjects
+  
   Prob_hat = colSums(Prob_hat) / N_scenario
   # Convert to matrix with shape of dimension x dimension for plotting.
   Lesion_prob_matrix = matrix(Prob_hat, ncol = dimension, nrow = dimension)
