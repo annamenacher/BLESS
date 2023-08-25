@@ -1,8 +1,21 @@
-# Libraries
+##############
+### Script ###
+##############
+
+# Script to perform posterior predictive checks, including calibration plots.
+
+#################
+### Libraries ###
+#################
+
 library(ggplot2)
 library(data.table)
 library(oro.nifti)
 library(ggpointdensity)
+
+#################
+### Constants ###
+#################
 
 set.seed(1234)
 
