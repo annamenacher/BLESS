@@ -403,6 +403,12 @@ estimate_BLESS = function(X, Y, params0, eps){
 
 # Function to calculate marginal posterior of gamma. 
 calculate_marginal = function(result, params0, X, y){
+
+  # Inputs:
+  # - result: list containing the output of DPE
+  # - params0: list containing intial parameter values
+  # - X: input data (scalar covariates)
+  # - y: output data (image -> lesion masks)
   
   # Set constants & hyperparameters.
   v0 = params0$v0
@@ -431,6 +437,11 @@ calculate_marginal = function(result, params0, X, y){
   # Function for deriving indices of adjacent neighbors of every single voxel location for 
   # spatial CAR prior (a voxel location is considered adjacent if they share the same face).
   adjacency_matrix = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       A = data.frame(x = integer(), y = integer())
@@ -519,6 +530,11 @@ calculate_marginal = function(result, params0, X, y){
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
+
+    # Input:
+    # - dim1: dimension1 of 3D MRI scan
+    # - dim2: dimension2 of 3D MRI scan
+    # - dim3: dimension3 of 3D MRI scan
     
     if(missing(dim3)){
       if (dim1<3 | dim2<3){ 
