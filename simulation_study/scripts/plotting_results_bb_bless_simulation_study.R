@@ -330,6 +330,13 @@ jet.colors <- colorRampPalette(c("#00007F", "blue", "#007FFF", "cyan", "#7FFF7F"
 
 # Plot 2D-image (jet-scale colors)
 plot_image = function(Lesion_prob_matrix, limit_start = 0.0, limit_end = 0.1, legend.position = 'none'){
+
+ # Input: 
+ # - Lesion_prob_matrix: 2D image to plot
+ # - limit_start: lower limit of values to plot
+ # - limit_end: uppper limit of values to plot
+ # - legend.position: legend position
+ 
   df <- reshape2::melt(Lesion_prob_matrix, varnames = c("x", "y"), value.name = "value")
   df$x = new_x
   df$y = new_y
@@ -346,6 +353,10 @@ plot_image = function(Lesion_prob_matrix, limit_start = 0.0, limit_end = 0.1, le
 
 # Plot 2D-image (black-white colors for binary values: black 0 and white 1)
 plot_binary_image = function(empirical_matrix){
+ 
+ # Input: 
+ # - empirical_matrix: 2D binary image to plot
+ 
   df <- reshape2::melt(empirical_matrix, varnames = c("x", "y"), value.name = "value")
   df$x = new_x
   df$y = new_y
@@ -358,6 +369,13 @@ plot_binary_image = function(empirical_matrix){
 
 # Plot 2D-image (red - blue scale colors)
 plot_image_rdbu = function(Lesion_prob_matrix, limit_start = 0.0, limit_end = 0.1, legend.position = 'none'){
+
+ # Input: 
+ # - Lesion_prob_matrix: 2D image to plot
+ # - limit_start: lower limit of values to plot
+ # - limit_end: uppper limit of values to plot
+ # - legend.position: legend position
+ 
   df <- reshape2::melt(Lesion_prob_matrix, varnames = c("x", "y"), value.name = "value")
   df$x = new_x
   df$y = new_y
