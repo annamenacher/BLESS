@@ -73,10 +73,10 @@ logit = function(x){
 bb_bless = function(X, Y, params0, eps){
 
   # Inputs:
-  # - X: vector with parameter estimates of model 1 (on x-axis)
-  # - Y: vector with parameter estimates of model 2 (on y-axis)
-  # - params0: vector with names of model, ex. c('BLESS-VI', 'Firth')
-  # - eps: plot title
+  # - X: input data (scalar covariates)
+  # - Y: output data (image -> lesion masks)
+  # - params0: list containing intial parameter values
+  # - eps: optimization threshold = difference between ELBOs which determines when to stop optimization
   
   # Time function call.
   time.start = Sys.time()
@@ -120,6 +120,11 @@ bb_bless = function(X, Y, params0, eps){
   # spatial MCAR prior (a voxel location is considered adjacent if they share the same face).
   adjacency_matrix = function(dim1, dim2, dim3){
     
+    # Inputs:
+    # - dim1: dimension1
+    # - dim2: dimension2
+    # - dim3: dimension3
+   
     if(missing(dim3)){
       A = data.frame(x = integer(),y = integer())
       ind = 1:(dim1*dim2)
@@ -207,6 +212,11 @@ bb_bless = function(X, Y, params0, eps){
   
   # Function for deriving number of neighbors of every single voxel location for spatial MCAR prior.
   n_neighbors = function(dim1, dim2, dim3){
+
+    # Inputs:
+    # - dim1: dimension1
+    # - dim2: dimension2
+    # - dim3: dimension3
     
     if(missing(dim3)){
       if (dim1 < 3 | dim2 < 3){ 
@@ -238,6 +248,11 @@ bb_bless = function(X, Y, params0, eps){
   
   # Function to acquire indices of upper triangular of adjacency matrix.
   upper_triangular = function(A, M){
+
+    # Inputs:
+    # - A: spatial adjacency matrix
+    # - M: total number of voxels
+    
     A = A[order(A$x),]
     UT = data.frame(x = integer(), y = integer())
     K = dim(A)[1]
